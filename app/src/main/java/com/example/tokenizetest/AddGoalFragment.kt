@@ -8,16 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.example.tokenizetest.ui.main.Goal
-import com.example.tokenizetest.ui.main.GoalsListAdapter
 import com.example.tokenizetest.ui.main.GoalsViewModel
 import com.example.tokenizetest.ui.main.GoalsViewModelFactory
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,7 +33,6 @@ class AddGoalFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var goalViewModel: GoalsViewModel
-    private lateinit var addgoal_btn: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,45 +49,64 @@ class AddGoalFragment : Fragment() {
         // Inflate the layout for this fragment
         val root = inflater.inflate(R.layout.addgoal_fragement, container, false)
 
-        val viewModelFactory = GoalsViewModelFactory(application = requireNotNull(this.activity).application)
-        goalViewModel = ViewModelProvider(requireActivity(), viewModelFactory).get(GoalsViewModel::class.java)
+        val viewModelFactory =
+            GoalsViewModelFactory(application = requireNotNull(this.activity).application)
+        goalViewModel =
+            ViewModelProvider(requireActivity(), viewModelFactory).get(GoalsViewModel::class.java)
 
-        addgoal_btn = root.findViewById<Button>(R.id.addgoal_button_addgoal)
-        val name_input = root.findViewById<TextInputEditText>(R.id.goal_textInput)
-        val price_input = root.findViewById<TextInputEditText>(R.id.price_textInput)
+        val addgoalBtn = root.findViewById<Button>(R.id.addgoal_button_addgoal)
+        val nameInput = root.findViewById<TextInputEditText>(R.id.goal_textInput)
+        val priceInput = root.findViewById<TextInputEditText>(R.id.price_textInput)
+        val princeInputLayout = root.findViewById<TextInputLayout>(R.id.price_textInputLayout)
 
-        addgoal_btn.setOnClickListener {
+        addgoalBtn.setOnClickListener {
             val priceInt = 100 //price?.text.toString().toInt()
-            goalViewModel.addGoal(Goal(name_input.toString(), priceInt))
-            Toast.makeText(this.context, name_input.text.toString(), Toast.LENGTH_LONG).show()
-            val action = AddGoalFragmentDirections.actionAddgoalFragementToMainFragment("test" /*name?.text?.toString()*/, priceInt)
+            goalViewModel.addGoal(Goal(nameInput.text.toString(), priceInput.text.toString().toInt()))
+            Toast.makeText(this.context, nameInput.text.toString(), Toast.LENGTH_LONG).show()
+            val action = AddGoalFragmentDirections.actionAddgoalFragementToMainFragment()
             it.findNavController().navigate(action)
         }
 
-        name_input.addTextChangedListener( NameInputWatcher(addgoal_btn))
-        name_input.text?.let {
-            addgoal_btn.isEnabled = it.isNotEmpty()
-            addgoal_btn.isClickable = it.isNotEmpty()
+        nameInput.addTextChangedListener(NameInputWatcher(addgoalBtn, priceInput))
+        nameInput.text?.let {
+            addgoalBtn.isEnabled = it.isNotEmpty()
+            addgoalBtn.isClickable = it.isNotEmpty()
         }
+        priceInput.addTextChangedListener(PriceInputWatcher(addgoalBtn, princeInputLayout, nameInput))
         return root
     }
 
-    private class NameInputWatcher(val btn: Button) : TextWatcher {
-
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-           }
-
-    override fun afterTextChanged(s: Editable?) {
-        s?.let {
-            val btn_enabled = it.isNotEmpty()
-            btn.isEnabled = btn_enabled
-            btn.isClickable = btn_enabled
+    private class NameInputWatcher(val btn: Button, val prc_inp: TextInputEditText) : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        override fun afterTextChanged(s: Editable?) {
+            s?.let {
+                val btn_enabled = it.isNotEmpty() && !prc_inp.text.isNullOrEmpty()
+                btn.isEnabled = btn_enabled
+                btn.isClickable = btn_enabled
+            }
         }
     }
 
-    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+    private class PriceInputWatcher(val btn: Button, val inp: TextInputLayout, val name_inp: TextInputEditText) : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        override fun afterTextChanged(s: Editable?) {
+            s?.let {
+                var btn_enabled = it.isNotEmpty() && !name_inp.text.isNullOrEmpty()
+                var new_hint = ""
+                try {
+                    it.toString().toInt()
+                } catch (e: NumberFormatException) {
+                    btn_enabled = false
+                    new_hint = inp.context.getString(R.string.addgoal_hint_notANumber)
+                }
+                inp.hint = new_hint
+                btn.isEnabled = btn_enabled
+                btn.isClickable = btn_enabled
+            }
+        }
     }
-}
 
     companion object {
         /**

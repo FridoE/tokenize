@@ -24,7 +24,6 @@ class MainFragment : Fragment() {
     companion object {
         fun newInstance() = MainFragment()
     }
-    val args: MainFragmentArgs by navArgs()
 
     val listGoals = ArrayList<GoalsViewModel>()
     //val testGoal = GoalsViewModel("Smartwatch", 300)
@@ -52,10 +51,6 @@ class MainFragment : Fragment() {
         } ?: throw Exception("Invalid Activity")
 
         goalViewModel.goalsList.observe(this, Observer{list -> adapter.submitList(list)})
- /*       if (args.GoalName != null) {
-            val newGoal = Goal(args.GoalName!!, args.GoalPrice)
-            goalViewModel.addGoal(newGoal)
-        }*/
 
         listView.layoutManager = LinearLayoutManager(this.context)
 
@@ -72,5 +67,4 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     }
-
 }

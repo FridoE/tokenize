@@ -59,8 +59,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/price_textInput"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="444 " />
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
