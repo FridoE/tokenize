@@ -2,6 +2,7 @@ package com.example.tokenizetest.ui.main
 
 import android.app.Application
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.Icon
 import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.*
@@ -60,10 +61,9 @@ class Goal {
     var balance: Int = 0
     var text: String
     val id: Int
-    var icon: Drawable
     var activities = mutableListOf<Activity>()
 
-    constructor(text: String, price: Int, activityName: String, activityEarnings: Int) {
+    constructor(text: String, price: Int, icon: Icon, activityName: String, activityEarnings: Int) {
         this.price = price
         this.text = text
         // TODO icon =
