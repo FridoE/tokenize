@@ -61,9 +61,9 @@ class MainFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        context?.let {
+ /*       context?.let {
             ContextCompat.getDrawable(it, R.drawable.line_divider)
-        }?.also {  listView.addItemDecoration(GoalsListDividerItemDecoration(it))}
+        }?.also {  listView.addItemDecoration(GoalsListDividerItemDecoration(it))}*/
 
         return rootView
     }

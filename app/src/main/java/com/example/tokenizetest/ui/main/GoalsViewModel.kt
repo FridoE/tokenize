@@ -1,28 +1,46 @@
 package com.example.tokenizetest.ui.main
 
 import android.app.Application
+import android.graphics.drawable.Drawable
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.*
+import com.example.tokenizetest.R
 
-class GoalsViewModel(app: Application): AndroidViewModel(app) {
+class GoalsViewModel(val app: Application): AndroidViewModel(app) {
 
     private val _goalsList = MutableLiveData<MutableList<Goal>>()
     val goalsList : LiveData<MutableList<Goal>>
             get() = _goalsList
 
+    var newGoalName: String = ""
+    var newGoalPrice: Int = 0
+    var newGoalDrawable: Drawable = ContextCompat.getDrawable(app.applicationContext, R.drawable.reward)!!
+    var newGoalActivityName: String = ""
+    var newGoalActivityEarnings: Int = 0
+
     init{
         _goalsList.value = mutableListOf<Goal>()
 
-        var newGoal = Goal("Smartwatch", 500)
+        var newGoal = Goal("Smartwatch", 500, "Act1", 5)
         newGoal.balance = 150
         addGoal(newGoal)
-        var secondGoal = Goal("Fernseher", 350)
+        var secondGoal = Goal("Fernseher", 350, "Act2", 10)
         secondGoal.balance = 80
         addGoal(secondGoal)
         Log.d("goalsviewmodel", "init")
     }
 
-    fun addGoal(goal: Goal) = _goalsList.value?.add(goal)
+    private fun addGoal(goal: Goal) = _goalsList.value?.add(goal)
+    fun addNewGoal() {
+        val goal = Goal(newGoalName, newGoalPrice, newGoalActivityName, newGoalActivityEarnings)
+        addGoal(goal)
+        newGoalName = ""
+        newGoalPrice = 0
+        newGoalDrawable = ContextCompat.getDrawable(app.applicationContext, R.drawable.reward)!!
+        newGoalActivityName = ""
+        newGoalActivityEarnings = 0
+    }
 
     companion object {
         fun balanceString(goal: Goal) :String {
@@ -38,15 +56,19 @@ class GoalsViewModel(app: Application): AndroidViewModel(app) {
 }
 
 class Goal {
-    val price: Int
+    var price: Int
     var balance: Int = 0
-    val text: String
+    var text: String
     val id: Int
+    var icon: Drawable
+    var activities = mutableListOf<Activity>()
 
-    constructor(text: String, price: Int) {
+    constructor(text: String, price: Int, activityName: String, activityEarnings: Int) {
         this.price = price
         this.text = text
+        // TODO icon =
         id = nextId++
+        activities.add(Activity(activityName, activityEarnings))
     }
 
     private companion object {
@@ -56,6 +78,9 @@ class Goal {
     override fun toString(): String {
         return "$text: $price €"
     }
+
+    data class Activity(var name: String, var earnings: Int)
+
 }
 
 fun <T> MutableLiveData<T>.notifyObserver() {

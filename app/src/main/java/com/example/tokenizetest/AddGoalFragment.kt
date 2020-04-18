@@ -8,12 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import com.example.tokenizetest.ui.main.Goal
+import com.cottacush.android.currencyedittext.CurrencyEditText
 import com.example.tokenizetest.ui.main.GoalsViewModel
 import com.example.tokenizetest.ui.main.GoalsViewModelFactory
+import com.example.tokenizetest.ui.main.hideSoftKeyboardOnFocusLostEnabled
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
@@ -56,14 +56,15 @@ class AddGoalFragment : Fragment() {
 
         val addgoalBtn = root.findViewById<Button>(R.id.addgoal_button_addgoal)
         val nameInput = root.findViewById<TextInputEditText>(R.id.goal_textInput)
-        val priceInput = root.findViewById<TextInputEditText>(R.id.price_textInput)
-        val princeInputLayout = root.findViewById<TextInputLayout>(R.id.price_textInputLayout)
+        val priceInput = root.findViewById<CurrencyEditText>(R.id.price_textInput)
+        val priceInputLayout = root.findViewById<TextInputLayout>(R.id.price_textInputLayout)
+        priceInput.hideSoftKeyboardOnFocusLostEnabled(true)
+        nameInput.hideSoftKeyboardOnFocusLostEnabled(true)
 
         addgoalBtn.setOnClickListener {
-            val priceInt = 100 //price?.text.toString().toInt()
-            goalViewModel.addGoal(Goal(nameInput.text.toString(), priceInput.text.toString().toInt()))
-            Toast.makeText(this.context, nameInput.text.toString(), Toast.LENGTH_LONG).show()
-            val action = AddGoalFragmentDirections.actionAddgoalFragementToMainFragment()
+            goalViewModel.newGoalName = nameInput.text.toString()
+            goalViewModel.newGoalPrice = priceInput.getNumericValue().toInt()
+            val action = AddGoalFragmentDirections.actionAddgoalFragementToAddActivityFragment()
             it.findNavController().navigate(action)
         }
 
@@ -72,7 +73,7 @@ class AddGoalFragment : Fragment() {
             addgoalBtn.isEnabled = it.isNotEmpty()
             addgoalBtn.isClickable = it.isNotEmpty()
         }
-        priceInput.addTextChangedListener(PriceInputWatcher(addgoalBtn, princeInputLayout, nameInput))
+        priceInput.addTextChangedListener(PriceInputWatcher(addgoalBtn, priceInputLayout, nameInput))
         return root
     }
 
@@ -93,15 +94,15 @@ class AddGoalFragment : Fragment() {
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         override fun afterTextChanged(s: Editable?) {
             s?.let {
-                var btn_enabled = it.isNotEmpty() && !name_inp.text.isNullOrEmpty()
-                var new_hint = ""
+                var btn_enabled = it.length>2 && !name_inp.text.isNullOrEmpty()
+ /*               var new_hint = ""
                 try {
                     it.toString().toInt()
                 } catch (e: NumberFormatException) {
                     btn_enabled = false
                     new_hint = inp.context.getString(R.string.addgoal_hint_notANumber)
                 }
-                inp.hint = new_hint
+                inp.hint = new_hint*/
                 btn.isEnabled = btn_enabled
                 btn.isClickable = btn_enabled
             }

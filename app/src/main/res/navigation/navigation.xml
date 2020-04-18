@@ -22,7 +22,16 @@
         android:label="fragment_addgoal_fragement"
         tools:layout="@layout/addgoal_fragement" >
         <action
-            android:id="@+id/action_addgoal_fragement_to_mainFragment"
+            android:id="@+id/action_addgoal_fragement_to_addActivityFragment"
+            app:destination="@id/addActivityFragment"
+            app:popUpTo="@id/addgoal_fragement" />
+    </fragment>
+    <fragment
+        android:id="@+id/addActivityFragment"
+        android:name="com.example.tokenizetest.ui.main.AddActivityFragment"
+        android:label="AddActivityFragment" >
+        <action
+            android:id="@+id/action_addActivityFragment_to_mainFragment"
             app:destination="@id/mainFragment"
             app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="true" />

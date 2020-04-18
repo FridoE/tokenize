@@ -54,4 +54,5 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$version_navigation"
     implementation "androidx.navigation:navigation-ui-ktx:$version_navigation"
     kapt 'com.android.databinding:compiler:3.5.3'
+    implementation 'com.cottacush:CurrencyEditText:0.0.6'
 }
