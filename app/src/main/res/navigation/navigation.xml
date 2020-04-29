@@ -20,7 +20,7 @@
         android:id="@+id/addgoal_fragement"
         android:name="com.example.tokenizetest.AddGoalFragment"
         android:label="fragment_addgoal_fragement"
-        tools:layout="@layout/addgoal_fragement" >
+        tools:layout="@layout/addgoal_fragment" >
         <action
             android:id="@+id/action_addgoal_fragement_to_addActivityFragment"
             app:destination="@id/addActivityFragment"

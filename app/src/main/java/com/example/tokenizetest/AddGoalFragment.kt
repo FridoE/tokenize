@@ -11,8 +11,9 @@ import android.widget.Button
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.cottacush.android.currencyedittext.CurrencyEditText
-import com.example.tokenizetest.ui.main.GoalsViewModel
-import com.example.tokenizetest.ui.main.GoalsViewModelFactory
+import com.example.tokenizetest.databinding.AddgoalFragmentBinding
+import com.example.tokenizetest.ui.main.GoalsListViewModel
+import com.example.tokenizetest.ui.main.GoalsListViewModelFactory
 import com.example.tokenizetest.ui.main.hideSoftKeyboardOnFocusLostEnabled
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -32,7 +33,8 @@ class AddGoalFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
-    private lateinit var goalViewModel: GoalsViewModel
+    private lateinit var goalListViewModel: GoalsListViewModel
+    private lateinit var binding: AddgoalFragmentBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,13 +48,14 @@ class AddGoalFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
-        val root = inflater.inflate(R.layout.addgoal_fragement, container, false)
+        val root = inflater.inflate(R.layout.addgoal_fragment, container, false)
 
         val viewModelFactory =
-            GoalsViewModelFactory(application = requireNotNull(this.activity).application)
-        goalViewModel =
-            ViewModelProvider(requireActivity(), viewModelFactory).get(GoalsViewModel::class.java)
+            GoalsListViewModelFactory(application = requireNotNull(this.activity).application)
+        goalListViewModel =
+            ViewModelProvider(requireActivity(), viewModelFactory).get(GoalsListViewModel::class.java)
 
         val addgoalBtn = root.findViewById<Button>(R.id.addgoal_button_addgoal)
         val nameInput = root.findViewById<TextInputEditText>(R.id.goal_textInput)
@@ -62,8 +65,8 @@ class AddGoalFragment : Fragment() {
         nameInput.hideSoftKeyboardOnFocusLostEnabled(true)
 
         addgoalBtn.setOnClickListener {
-            goalViewModel.newGoalName = nameInput.text.toString()
-            goalViewModel.newGoalPrice = priceInput.getNumericValue().toInt()
+            goalListViewModel.newGoalName = nameInput.text.toString()
+            goalListViewModel.newGoalPrice = priceInput.getNumericValue().toInt()
             val action = AddGoalFragmentDirections.actionAddgoalFragementToAddActivityFragment()
             it.findNavController().navigate(action)
         }
@@ -116,7 +119,7 @@ class AddGoalFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment addgoal_fragement.
+         * @return A new instance of fragment addgoal_fragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic

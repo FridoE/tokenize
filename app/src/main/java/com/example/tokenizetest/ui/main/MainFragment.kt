@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -22,10 +21,10 @@ class MainFragment : Fragment() {
         fun newInstance() = MainFragment()
     }
 
-    val listGoals = ArrayList<GoalsViewModel>()
+    val listGoals = ArrayList<GoalsListViewModel>()
     //val testGoal = GoalsViewModel("Smartwatch", 300)
 
-    private lateinit var goalViewModel: GoalsViewModel
+    private lateinit var goalListViewModel: GoalsListViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,17 +38,17 @@ class MainFragment : Fragment() {
         val rootView = inflater.inflate(R.layout.main_fragment, container, false)
         val listView = rootView.findViewById<RecyclerView>(R.id.listGoals)
         val viewModelFactory =
-            GoalsViewModelFactory(application = requireNotNull(this.activity).application)
+            GoalsListViewModelFactory(application = requireNotNull(this.activity).application)
         val adapter = GoalsListAdapter()
 
-        goalViewModel =
-            ViewModelProvider(requireActivity(), viewModelFactory).get(GoalsViewModel::class.java)
+        goalListViewModel =
+            ViewModelProvider(requireActivity(), viewModelFactory).get(GoalsListViewModel::class.java)
 
-        goalViewModel = activity?.run {
-            ViewModelProvider(this).get(GoalsViewModel::class.java)
+        goalListViewModel = activity?.run {
+            ViewModelProvider(this).get(GoalsListViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
-        goalViewModel.goalsList.observe(this, Observer { list -> adapter.submitList(list) })
+        goalListViewModel.goalsList.observe(this.viewLifecycleOwner, Observer { list -> adapter.submitList(list) })
 
         listView.layoutManager = LinearLayoutManager(this.context)
 

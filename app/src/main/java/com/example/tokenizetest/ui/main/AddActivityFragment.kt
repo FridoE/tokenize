@@ -16,7 +16,7 @@ import com.google.android.material.textfield.TextInputEditText
 
 class AddActivityFragment : Fragment() {
 
-    private lateinit var goalViewModel: GoalsViewModel
+    private lateinit var goalListViewModel: GoalsListViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,9 +34,9 @@ class AddActivityFragment : Fragment() {
         val completeButton = rootView.findViewById<Button>(R.id.completeButton)
 
         val viewModelFactory =
-            GoalsViewModelFactory(application = requireNotNull(this.activity).application)
-        goalViewModel =
-            ViewModelProvider(requireActivity(), viewModelFactory).get(GoalsViewModel::class.java)
+            GoalsListViewModelFactory(application = requireNotNull(this.activity).application)
+        goalListViewModel =
+            ViewModelProvider(requireActivity(), viewModelFactory).get(GoalsListViewModel::class.java)
 
         val inputsArray = ArrayList<TextInputEditText>()
         inputsArray.add(activityInputEdit)
@@ -52,9 +52,9 @@ class AddActivityFragment : Fragment() {
         rewardInputEdit.addTextChangedListener(EmptyInputsDisableButtonsWatcher(rewardInputEdit, inputsArray.toTypedArray(), buttonsArray.toTypedArray()))
 
         completeButton.setOnClickListener {
-            goalViewModel.newGoalActivityName = activityInputEdit.text.toString()
-            goalViewModel.newGoalActivityEarnings = rewardInputEdit.getNumericValue().toInt()
-            goalViewModel.addNewGoal()
+            goalListViewModel.newGoalActivityName = activityInputEdit.text.toString()
+            goalListViewModel.newGoalActivityEarnings = rewardInputEdit.getNumericValue().toInt()
+            goalListViewModel.addNewGoal()
             val action = AddActivityFragmentDirections.actionAddActivityFragmentToMainFragment()
             it.findNavController().navigate(action)
         }

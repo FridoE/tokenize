@@ -1,22 +1,17 @@
 package com.example.tokenizetest.ui.main
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.BaseAdapter
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.annotation.NonNull
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tokenizetest.R
-import org.w3c.dom.Text
 
 
-class GoalsListAdapter(): ListAdapter<Goal, GoalsListAdapter.ViewHolder>(SleepNightDiffCallback()) {
+class GoalsListAdapter(): ListAdapter<GoalViewModel, GoalsListAdapter.ViewHolder>(SleepNightDiffCallback()) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -27,9 +22,9 @@ class GoalsListAdapter(): ListAdapter<Goal, GoalsListAdapter.ViewHolder>(SleepNi
 
     override fun onBindViewHolder(holder: GoalsListAdapter.ViewHolder, position: Int) {
         val goal = getItem(position)
-        holder.textGoal?.text = GoalsViewModel.titleString(goal)
-        holder.textProgress?.text = GoalsViewModel.balanceString(goal)
-        holder.progressBalance?.progress = GoalsViewModel.progress(goal)
+        holder.textGoal?.text = goal.name
+        holder.textProgress?.text = goal.balanceString
+        holder.progressBalance?.progress = goal.progress
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -44,12 +39,12 @@ class GoalsListAdapter(): ListAdapter<Goal, GoalsListAdapter.ViewHolder>(SleepNi
     }
 
 }
-class SleepNightDiffCallback : DiffUtil.ItemCallback<Goal>() {
-    override fun areItemsTheSame(oldItem: Goal, newItem: Goal): Boolean {
+class SleepNightDiffCallback : DiffUtil.ItemCallback<GoalViewModel>() {
+    override fun areItemsTheSame(oldItem: GoalViewModel, newItem: GoalViewModel): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: Goal, newItem: Goal): Boolean {
+    override fun areContentsTheSame(oldItem: GoalViewModel, newItem: GoalViewModel): Boolean {
         return oldItem == newItem
     }
 }
