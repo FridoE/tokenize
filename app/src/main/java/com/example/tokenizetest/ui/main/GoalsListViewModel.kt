@@ -51,7 +51,7 @@ class GoalsListViewModel(val app: Application) : AndroidViewModel(app) {
         newGoalActivityEarnings = 0
     }
 
-    companion object {
+/*    companion object {
         fun balanceString(goal: Goal): String {
             return "${goal.balance} € (${GoalsListViewModel.progress(goal)}%)"
         }
@@ -63,7 +63,7 @@ class GoalsListViewModel(val app: Application) : AndroidViewModel(app) {
         fun progress(goal: Goal): Int {
             return ((goal.balance.toFloat()) / goal.price * 100).toInt()
         }
-    }
+    }*/
 }
 
 class GoalViewModel(

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.cottacush.android.currencyedittext.CurrencyEditText
@@ -51,6 +52,8 @@ class AddGoalFragment : Fragment() {
 
         // Inflate the layout for this fragment
         val root = inflater.inflate(R.layout.addgoal_fragment, container, false)
+       /* val binding: AddgoalFragmentBinding = DataBindingUtil.setContentView(this.activity!!, R.layout.addgoal_fragment)
+        binding.setLifecycleOwner(this)*/
 
         val viewModelFactory =
             GoalsListViewModelFactory(application = requireNotNull(this.activity).application)
