@@ -1,4 +1,4 @@
-package com.example.tokenizetest
+package com.example.tokenizetest.ui.main
 
 import android.os.Bundle
 import android.text.Editable
@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.cottacush.android.currencyedittext.CurrencyEditText
+import com.example.tokenizetest.R
 import com.example.tokenizetest.databinding.AddgoalFragmentBinding
 import com.example.tokenizetest.ui.main.GoalsListViewModel
 import com.example.tokenizetest.ui.main.GoalsListViewModelFactory

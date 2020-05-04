@@ -37,12 +37,7 @@ class MainFragment : Fragment() {
     ): View {
         val rootView = inflater.inflate(R.layout.main_fragment, container, false)
         val listView = rootView.findViewById<RecyclerView>(R.id.listGoals)
-        val viewModelFactory =
-            GoalsListViewModelFactory(application = requireNotNull(this.activity).application)
-        val adapter = GoalsListAdapter()
-
-        goalListViewModel =
-            ViewModelProvider(requireActivity(), viewModelFactory).get(GoalsListViewModel::class.java)
+        val adapter = GoalsListAdapter({g: Goal -> goalsListItemClickListener(g)})
 
         goalListViewModel = activity?.run {
             ViewModelProvider(this).get(GoalsListViewModel::class.java)
@@ -69,6 +64,10 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    fun goalsListItemClickListener(g: Goal) {
+        //TODO: navigate to ShowGoalFragment
     }
 }
 

@@ -41,10 +41,11 @@
             <ProgressBar
                 android:id="@+id/progressBalance"
                 style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
-                android:layout_width="357dp"
+                android:layout_width="0dp"
                 android:layout_height="11dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="2dp"
+                android:layout_marginEnd="4dp"
                 android:backgroundTint="#673AB7"
                 android:backgroundTintMode="src_over"
                 android:max="100"
@@ -54,6 +55,7 @@
                 android:progressTintMode="multiply"
                 android:scaleY="1"
                 android:scrollbarSize="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageSymbol"
                 app:layout_constraintTop_toBottomOf="@+id/textGoal" />
 
@@ -78,7 +80,8 @@
                 android:gravity="center"
                 android:text="Balance: 150 € (50 %)"
                 android:textColor="@android:color/primary_text_light_nodisable"
-                android:textSize="14sp"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/progressBalance"
                 app:layout_constraintTop_toBottomOf="@+id/progressBalance" />
 
