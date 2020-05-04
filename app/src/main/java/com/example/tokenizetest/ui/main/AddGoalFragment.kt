@@ -15,7 +15,7 @@ import com.cottacush.android.currencyedittext.CurrencyEditText
 import com.example.tokenizetest.R
 import com.example.tokenizetest.databinding.AddgoalFragmentBinding
 import com.example.tokenizetest.ui.main.GoalsListViewModel
-import com.example.tokenizetest.ui.main.GoalsListViewModelFactory
+//import com.example.tokenizetest.ui.main.GoalsListViewModelFactory
 import com.example.tokenizetest.ui.main.hideSoftKeyboardOnFocusLostEnabled
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
@@ -56,10 +56,9 @@ class AddGoalFragment : Fragment() {
        /* val binding: AddgoalFragmentBinding = DataBindingUtil.setContentView(this.activity!!, R.layout.addgoal_fragment)
         binding.setLifecycleOwner(this)*/
 
-        val viewModelFactory =
-            GoalsListViewModelFactory(application = requireNotNull(this.activity).application)
-        goalListViewModel =
-            ViewModelProvider(requireActivity(), viewModelFactory).get(GoalsListViewModel::class.java)
+        goalListViewModel = activity?.run {
+            ViewModelProvider(this).get(GoalsListViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
 
         val addgoalBtn = root.findViewById<Button>(R.id.addgoal_button_addgoal)
         val nameInput = root.findViewById<TextInputEditText>(R.id.goal_textInput)

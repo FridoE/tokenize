@@ -1,5 +1,6 @@
 package com.example.tokenizetest.ui.main
 
+import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,7 +24,7 @@ class ShowGoalFragment : Fragment() {
         val adapter = ShowGoalActivityListAdapter()
 
         val showgoalViewModel = activity?.run {
-            ViewModelProvider(this).get(ShowGoalViewModel::class.java)
+            ViewModelProvider(this, ShowGoalViewModelFactory(this.application, Goal("test", 100, Icon.createWithResource(this.applicationContext, R.drawable.reward), "asdf", 10))).get(ShowGoalViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
         showgoalViewModel.activityList.observe(this.viewLifecycleOwner, Observer { list -> adapter.submitList(list) })

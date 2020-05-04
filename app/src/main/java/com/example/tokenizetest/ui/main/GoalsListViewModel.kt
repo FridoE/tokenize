@@ -49,20 +49,6 @@ class GoalsListViewModel(val app: Application) : AndroidViewModel(app) {
         newGoalActivityName = ""
         newGoalActivityEarnings = 0
     }
-
-/*    companion object {
-        fun balanceString(goal: Goal): String {
-            return "${goal.balance} € (${GoalsListViewModel.progress(goal)}%)"
-        }
-
-        fun titleString(goal: Goal): String {
-            return "${goal.name} (${goal.price} €)"
-        }
-
-        fun progress(goal: Goal): Int {
-            return ((goal.balance.toFloat()) / goal.price * 100).toInt()
-        }
-    }*/
 }
 
 class GoalsListItemViewModel(
@@ -124,7 +110,8 @@ fun <T> MutableLiveData<T>.notifyObserver() {
     this.value = this.value
 }
 
-class GoalsListViewModelFactory(
+//Not necessary since the only argument for the viewmodel is (application)
+/*class GoalsListViewModelFactory(
     private val application: Application
 ) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
@@ -134,4 +121,4 @@ class GoalsListViewModelFactory(
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
-}
+}*/

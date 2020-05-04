@@ -1,9 +1,7 @@
 package com.example.tokenizetest.ui.main
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
 import androidx.lifecycle.Transformations.map
 
 class ShowGoalViewModel(val app: Application, val _goal: Goal) : AndroidViewModel(app) {
@@ -14,6 +12,18 @@ class ShowGoalViewModel(val app: Application, val _goal: Goal) : AndroidViewMode
 
     init {
         _activityList.value =  _goal.activities.map { TokenizedActivityViewModel(app, it) }.toMutableList()
+    }
+}
+
+class ShowGoalViewModelFactory(
+    private val application: Application, val goal: Goal
+) : ViewModelProvider.Factory {
+    @Suppress("unchecked_cast")
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(ShowGoalViewModel::class.java)) {
+            return ShowGoalViewModel(application, goal) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
 

@@ -33,10 +33,9 @@ class AddActivityFragment : Fragment() {
  //       val addAnotherActivityButton =  rootView.findViewById<Button>(R.id.addAnotherActivityButton)
         val completeButton = rootView.findViewById<Button>(R.id.completeButton)
 
-        val viewModelFactory =
-            GoalsListViewModelFactory(application = requireNotNull(this.activity).application)
-        goalListViewModel =
-            ViewModelProvider(requireActivity(), viewModelFactory).get(GoalsListViewModel::class.java)
+        goalListViewModel = activity?.run {
+            ViewModelProvider(this).get(GoalsListViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
 
         val inputsArray = ArrayList<TextInputEditText>()
         inputsArray.add(activityInputEdit)
