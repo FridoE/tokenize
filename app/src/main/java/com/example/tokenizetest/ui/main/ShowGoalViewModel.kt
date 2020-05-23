@@ -31,6 +31,7 @@ class TokenizedActivityViewModel(
     val app: Application,
     var _activity: Goal.TokenizedActivity
 ) : AndroidViewModel(app) {
-    val titleString = _activity.name
-
+    val titleString = "${_activity.name}: ${_activity.earnings} €"
+    val totalEarningsString = "You have earned a total of ${_activity.log.count()*_activity.earnings} € by doing this activity"
+    val remainingString = ""
 }

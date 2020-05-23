@@ -23,8 +23,9 @@ class ShowGoalFragment : Fragment() {
         val listView = rootView.findViewById<RecyclerView>(R.id.activityList)
         val adapter = ShowGoalActivityListAdapter()
 
+        var exampleGoal = Goal("test", 100, Icon.createWithResource(this.context, R.drawable.reward), "asdf", 10)
         val showgoalViewModel = activity?.run {
-            ViewModelProvider(this, ShowGoalViewModelFactory(this.application, Goal("test", 100, Icon.createWithResource(this.applicationContext, R.drawable.reward), "asdf", 10))).get(ShowGoalViewModel::class.java)
+            ViewModelProvider(this, ShowGoalViewModelFactory(this.application, exampleGoal)).get(ShowGoalViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
         showgoalViewModel.activityList.observe(this.viewLifecycleOwner, Observer { list -> adapter.submitList(list) })

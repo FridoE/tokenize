@@ -3,13 +3,11 @@ package com.example.tokenizetest.ui.main
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tokenizetest.R
-import de.hdodenhof.circleimageview.CircleImageView
 
 class ShowGoalActivityListAdapter : ListAdapter<TokenizedActivityViewModel, ShowGoalActivityListAdapter.ViewHolder>(TokenizedActivityViewModelDiffCallback()) {
 
@@ -22,24 +20,22 @@ class ShowGoalActivityListAdapter : ListAdapter<TokenizedActivityViewModel, Show
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val goal = getItem(position)
-        /*holder.textGoal?.text = goal.titleString
-        holder.textProgress?.text = goal.balanceString
-        holder.progressBalance?.progress = goal.progress
-        holder.iconImageView?.setImageIcon(goal.icon)*/
+        val activityVM = getItem(position)
+        holder.activityEntryTitle?.text = activityVM.titleString
+        holder.activityTotalEarnings?.text = activityVM.totalEarningsString
+        //holder.activityRemaining?.text = activityVM.remainingString
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-       /* var textGoal: TextView? = null
-        var textProgress: TextView? = null
-        var progressBalance: ProgressBar? = null
-        var iconImageView: CircleImageView? = null
+        var activityEntryTitle: TextView? = null
+        var activityTotalEarnings: TextView? = null
+        var activityRemaining: TextView? = null
+
         init {
-            textGoal = itemView.findViewById(R.id.textGoal)
-            textProgress = itemView.findViewById(R.id.textProgress)
-            progressBalance = itemView.findViewById(R.id.progressBalance)
-            iconImageView = itemView.findViewById(R.id.imageSymbol)
-        }*/
+            activityEntryTitle = itemView.findViewById(R.id.textActivityEntryTitle)
+            activityTotalEarnings = itemView.findViewById(R.id.textActivityTotalEarnings)
+            //activityRemaining = itemView.findViewById(R.id.textActivityRemaining)
+        }
     }
 
 }

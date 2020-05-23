@@ -103,7 +103,15 @@ class Goal(
         return "$name: $price €"
     }
 
-    data class TokenizedActivity(var name: String, var earnings: Int)
+    fun logActivity(activityId : Int, date: Date ) {
+        activities.find{it.id == activityId}?.log?.add(date)
+    }
+
+    data class TokenizedActivity(var name: String, var earnings: Int) {
+        var log: MutableList<Date> = mutableListOf<Date>()
+        val id = nextId++
+        private companion object {var nextId = 1}
+    }
 }
 
 fun <T> MutableLiveData<T>.notifyObserver() {
