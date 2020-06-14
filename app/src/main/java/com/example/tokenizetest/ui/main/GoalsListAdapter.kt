@@ -22,12 +22,12 @@ class GoalsListAdapter(val onclickListener: (Goal) -> Unit): ListAdapter<GoalsLi
     }
 
     override fun onBindViewHolder(holder: GoalsListAdapter.ViewHolder, position: Int) {
-        val goal = getItem(position)
-        holder.textGoal?.text = goal.titleString
-        holder.textProgress?.text = goal.balanceString
-        holder.progressBalance?.progress = goal.progress
-        holder.iconImageView?.setImageIcon(goal.icon)
-        holder.bind(goal.goal, onclickListener)
+        val goalVM = getItem(position)
+        holder.textGoal?.text = goalVM.titleString
+        holder.textProgress?.text = goalVM.balanceString
+        holder.progressBalance?.progress = goalVM.progress
+        holder.iconImageView?.setImageIcon(goalVM.icon)
+        holder.bind(goalVM.goal, onclickListener)
     }
 
     class ViewHolder(val _itemView: View): RecyclerView.ViewHolder(_itemView) {

@@ -9,10 +9,9 @@
     android:scrollbarSize="50dp">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="389dp"
-        android:layout_height="97dp"
+        android:layout_width="393dp"
+        android:layout_height="77dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         app:cardBackgroundColor="#FFFFFF"
@@ -25,7 +24,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="413dp"
-            android:layout_height="match_parent">
+            android:layout_height="63dp">
 
             <TextView
                 android:id="@+id/textActivityEntryTitle"
@@ -49,13 +48,6 @@
                 app:layout_constraintStart_toStartOf="@+id/textActivityEntryTitle"
                 app:layout_constraintTop_toBottomOf="@+id/textActivityEntryTitle" />
 
-            <TextView
-                android:id="@+id/textActivityRemaining"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Do it another 34 times to  earn the smartphone!"
-                app:layout_constraintStart_toStartOf="@+id/textActivityTotalEarnings"
-                app:layout_constraintTop_toBottomOf="@+id/textActivityTotalEarnings" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

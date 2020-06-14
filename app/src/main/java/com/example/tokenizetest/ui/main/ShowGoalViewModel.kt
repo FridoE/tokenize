@@ -2,7 +2,6 @@ package com.example.tokenizetest.ui.main
 
 import android.app.Application
 import androidx.lifecycle.*
-import androidx.lifecycle.Transformations.map
 
 class ShowGoalViewModel(val app: Application, val _goal: Goal) : AndroidViewModel(app) {
 
@@ -12,6 +11,9 @@ class ShowGoalViewModel(val app: Application, val _goal: Goal) : AndroidViewMode
 
     init {
         _activityList.value =  _goal.activities.map { TokenizedActivityViewModel(app, it) }.toMutableList()
+    }
+    fun activityDone(activityVM : TokenizedActivityViewModel) {
+
     }
 }
 
@@ -29,9 +31,11 @@ class ShowGoalViewModelFactory(
 
 class TokenizedActivityViewModel(
     val app: Application,
-    var _activity: Goal.TokenizedActivity
+    var _tokenizedActivity: Goal.TokenizedActivity
 ) : AndroidViewModel(app) {
-    val titleString = "${_activity.name}: ${_activity.earnings} €"
-    val totalEarningsString = "You have earned a total of ${_activity.log.count()*_activity.earnings} € by doing this activity"
+    val titleString = "${_tokenizedActivity.name}: ${_tokenizedActivity.earnings} €"
+    val totalEarningsString = "You have earned a total of ${_tokenizedActivity.log.count()*_tokenizedActivity.earnings} € by doing this activity"
     val remainingString = ""
+    val id = _tokenizedActivity.id
+    var doneActivity: Boolean = false
 }

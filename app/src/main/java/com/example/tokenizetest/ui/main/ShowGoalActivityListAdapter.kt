@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tokenizetest.R
 
-class ShowGoalActivityListAdapter : ListAdapter<TokenizedActivityViewModel, ShowGoalActivityListAdapter.ViewHolder>(TokenizedActivityViewModelDiffCallback()) {
+class ShowGoalActivityListAdapter(val onclickListener: (TokenizedActivityViewModel) -> Unit) : ListAdapter<TokenizedActivityViewModel, ShowGoalActivityListAdapter.ViewHolder>(TokenizedActivityViewModelDiffCallback()) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -23,6 +23,7 @@ class ShowGoalActivityListAdapter : ListAdapter<TokenizedActivityViewModel, Show
         val activityVM = getItem(position)
         holder.activityEntryTitle?.text = activityVM.titleString
         holder.activityTotalEarnings?.text = activityVM.totalEarningsString
+        holder.bind(activityVM, onclickListener)
         //holder.activityRemaining?.text = activityVM.remainingString
     }
 
@@ -35,6 +36,9 @@ class ShowGoalActivityListAdapter : ListAdapter<TokenizedActivityViewModel, Show
             activityEntryTitle = itemView.findViewById(R.id.textActivityEntryTitle)
             activityTotalEarnings = itemView.findViewById(R.id.textActivityTotalEarnings)
             //activityRemaining = itemView.findViewById(R.id.textActivityRemaining)
+        }
+        fun bind(activityVM: TokenizedActivityViewModel, ocl: (TokenizedActivityViewModel) -> Unit) {
+            itemView.setOnClickListener{ocl(activityVM)}
         }
     }
 

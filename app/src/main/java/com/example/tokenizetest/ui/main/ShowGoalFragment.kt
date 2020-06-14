@@ -21,7 +21,7 @@ class ShowGoalFragment : Fragment() {
 
         val rootView = inflater.inflate(R.layout.goal_fragment, container, false)
         val listView = rootView.findViewById<RecyclerView>(R.id.activityList)
-        val adapter = ShowGoalActivityListAdapter()
+        val adapter = ShowGoalActivityListAdapter({avm: TokenizedActivityViewModel -> onClickActivity(avm)})
 
         val showgoalViewModel = activity?.run {
             ViewModelProvider(this, ShowGoalViewModelFactory(this.application, Goal("test", 100, Icon.createWithResource(this.applicationContext, R.drawable.reward), "asdf", 10))).get(ShowGoalViewModel::class.java)
@@ -34,5 +34,13 @@ class ShowGoalFragment : Fragment() {
         listView.adapter = adapter
 
         return rootView
+    }
+
+    fun onClickActivity(activityVM: TokenizedActivityViewModel) {
+        ActivityDoneDialog(activityVM).show(childFragmentManager, "f")
+        if(activityVM.doneActivity) {
+            showgoalViewModel.doneActivity(activityVM)
+            activityVM.doneActivity = false
+        }
     }
 }
