@@ -1,0 +1,62 @@
+package com.example.tokenizetest.ui.main
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.example.tokenizetest.R
+
+class ActivityHistoryListAdapter : ListAdapter<ActivityHistoryListItemVM, ActivityHistoryListAdapter.ViewHolder>(ActivityHistoryListItemVMDiffCallback()) {
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ViewHolder {
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.activitylist_entry, parent, false)
+        return ViewHolder(itemView)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+/*        val activityVM = getItem(position)
+        holder.activityEntryTitle?.text = activityVM.titleString
+        holder.activityTotalEarnings?.text = activityVM.totalEarningsString
+        holder.bind(activityVM, onclickListener)
+        //holder.activityRemaining?.text = activityVM.remainingString*/
+    }
+
+    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+/*        var activityEntryTitle: TextView? = null
+        var activityTotalEarnings: TextView? = null
+        var activityRemaining: TextView? = null
+
+        init {
+
+            activityEntryTitle = itemView.findViewById(R.id.textActivityEntryTitle)
+            activityTotalEarnings = itemView.findViewById(R.id.textActivityTotalEarnings)
+            //activityRemaining = itemView.findViewById(R.id.textActivityRemaining)
+
+        }
+        fun bind(activityVM: TokenizedActivityViewModel, ocl: (TokenizedActivityViewModel) -> Unit) {
+//            itemView.setOnClickListener{ocl(activityVM)}
+        }*/
+    }
+}
+
+
+
+class ActivityHistoryListItemVM {
+
+}
+
+class ActivityHistoryListItemVMDiffCallback : DiffUtil.ItemCallback<ActivityHistoryListItemVM>() {
+    override fun areItemsTheSame(oldItem: ActivityHistoryListItemVM, newItem: ActivityHistoryListItemVM): Boolean {
+        return false // oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: ActivityHistoryListItemVM, newItem: ActivityHistoryListItemVM): Boolean {
+        return false // oldItem == newItem
+    }
+}

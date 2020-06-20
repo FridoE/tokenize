@@ -7,7 +7,7 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.example.tokenizetest.R
 
-class ActivityDoneDialog(var activityVM: TokenizedActivityViewModel) : DialogFragment() {
+class ActivityDoneDialog(var activityVM: TokenizedActivityViewModel, var showGoalVM: ShowGoalViewModel) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             // Use the Builder class for convenient dialog construction
@@ -15,7 +15,7 @@ class ActivityDoneDialog(var activityVM: TokenizedActivityViewModel) : DialogFra
             builder.setMessage("Have you done this activity?")
                 .setPositiveButton("Yes",
                     DialogInterface.OnClickListener { dialog, id ->
-                        activityVM.doneActivity = true
+                        showGoalVM.doneActivity(activityVM)
                     })
                 .setNegativeButton("No",
                     DialogInterface.OnClickListener { dialog, id ->

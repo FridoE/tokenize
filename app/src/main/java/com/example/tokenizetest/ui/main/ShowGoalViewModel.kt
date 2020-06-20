@@ -1,19 +1,27 @@
 package com.example.tokenizetest.ui.main
 
 import android.app.Application
+import android.icu.util.Calendar
 import androidx.lifecycle.*
 
 class ShowGoalViewModel(val app: Application, val _goal: Goal) : AndroidViewModel(app) {
 
-    private val _activityList = MutableLiveData<MutableList<TokenizedActivityViewModel>>()
+    private val _activityVMList = MutableLiveData<MutableList<TokenizedActivityViewModel>>()
+    private val _activityHistoryList = MutableLiveData<MutableList<ActivityHistoryListItemVM>>()
     val activityList: LiveData<MutableList<TokenizedActivityViewModel>>
-        get() = _activityList
+        get() = _activityVMList
+    val activityHistoryList: LiveData<MutableList<ActivityHistoryListItemVM>>
+        get() = _activityHistoryList
 
     init {
-        _activityList.value =  _goal.activities.map { TokenizedActivityViewModel(app, it) }.toMutableList()
+        _activityVMList.value =  _goal.activities.map { TokenizedActivityViewModel(app, it)}.toMutableList()
+    //TODO initialisze history list
     }
-    fun activityDone(activityVM : TokenizedActivityViewModel) {
 
+
+    fun doneActivity(activityVM: TokenizedActivityViewModel) {
+        _goal.logActivity(activityVM.id, Calendar.getInstance().time)
+        //TODO: update history list
     }
 }
 
@@ -37,5 +45,4 @@ class TokenizedActivityViewModel(
     val totalEarningsString = "You have earned a total of ${_tokenizedActivity.log.count()*_tokenizedActivity.earnings} € by doing this activity"
     val remainingString = ""
     val id = _tokenizedActivity.id
-    var doneActivity: Boolean = false
 }

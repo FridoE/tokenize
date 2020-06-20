@@ -4,6 +4,7 @@ import android.app.Application
 import android.graphics.drawable.Icon
 import android.icu.text.NumberFormat
 import android.icu.util.Currency
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.tokenizetest.R
 import java.util.*
@@ -105,6 +106,7 @@ class Goal(
 
     fun logActivity(activityId : Int, date: Date ) {
         activities.find{it.id == activityId}?.log?.add(date)
+        Log.d("Goal", "logActivity: $date")
     }
 
     data class TokenizedActivity(var name: String, var earnings: Int) {
