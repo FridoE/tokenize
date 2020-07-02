@@ -2,10 +2,10 @@ package com.example.tokenizetest.ui.main
 
 import android.app.Application
 import android.icu.util.Calendar
+import android.util.Log
 import androidx.lifecycle.*
 
 class ShowGoalViewModel(val app: Application, val _goal: Goal) : AndroidViewModel(app) {
-
     private val _activityVMList = MutableLiveData<MutableList<TokenizedActivityViewModel>>()
     private val _activityHistoryList = MutableLiveData<MutableList<ActivityHistoryListItemVM>>()
     val activityList: LiveData<MutableList<TokenizedActivityViewModel>>
@@ -15,13 +15,12 @@ class ShowGoalViewModel(val app: Application, val _goal: Goal) : AndroidViewMode
 
     init {
         _activityVMList.value =  _goal.activities.map { TokenizedActivityViewModel(app, it)}.toMutableList()
-    //TODO initialisze history list
+        _activityHistoryList.value = _goal.activities.map {ac -> ac.log.map { ActivityHistoryListItemVM(ac, it) }}.flatten().toMutableList()
     }
-
 
     fun doneActivity(activityVM: TokenizedActivityViewModel) {
         _goal.logActivity(activityVM.id, Calendar.getInstance().time)
-        //TODO: update history list
+        _activityHistoryList.value = _goal.activities.map {ac -> ac.log.map { ActivityHistoryListItemVM(ac, it) }}.flatten().toMutableList()
     }
 }
 

@@ -8,47 +8,38 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tokenizetest.R
+import java.util.*
 
 class ActivityHistoryListAdapter : ListAdapter<ActivityHistoryListItemVM, ActivityHistoryListAdapter.ViewHolder>(ActivityHistoryListItemVMDiffCallback()) {
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.activitylist_entry, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.activityhistorylist_entry, parent, false)
         return ViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-/*        val activityVM = getItem(position)
-        holder.activityEntryTitle?.text = activityVM.titleString
-        holder.activityTotalEarnings?.text = activityVM.totalEarningsString
-        holder.bind(activityVM, onclickListener)
-        //holder.activityRemaining?.text = activityVM.remainingString*/
+        val activityHistoryListItemVM = getItem(position)
+        holder.historyText?.text = activityHistoryListItemVM.historyText
+//        holder.bind(activityHistoryListItemVM, onclickListener)
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-/*        var activityEntryTitle: TextView? = null
-        var activityTotalEarnings: TextView? = null
-        var activityRemaining: TextView? = null
-
+        var historyText: TextView? = null
         init {
-
-            activityEntryTitle = itemView.findViewById(R.id.textActivityEntryTitle)
-            activityTotalEarnings = itemView.findViewById(R.id.textActivityTotalEarnings)
-            //activityRemaining = itemView.findViewById(R.id.textActivityRemaining)
-
+            historyText = itemView.findViewById(R.id.activityhistorylist_text)
         }
         fun bind(activityVM: TokenizedActivityViewModel, ocl: (TokenizedActivityViewModel) -> Unit) {
 //            itemView.setOnClickListener{ocl(activityVM)}
-        }*/
+        }
     }
 }
 
 
 
-class ActivityHistoryListItemVM {
-
+class ActivityHistoryListItemVM(val _act: Goal.TokenizedActivity, val _date: Date) {
+    val historyText = "${_date.toString()} -> ${_act.name}"
 }
 
 class ActivityHistoryListItemVMDiffCallback : DiffUtil.ItemCallback<ActivityHistoryListItemVM>() {

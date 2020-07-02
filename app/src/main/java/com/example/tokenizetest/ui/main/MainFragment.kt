@@ -68,7 +68,6 @@ class MainFragment : Fragment() {
     }
 
     fun goalsListItemClickListener(g: Goal) {
-        //TODO: navigate to ShowGoalFragment
         Toast.makeText(this.context, "Click ${g.id}", Toast.LENGTH_LONG).show()
         val action = MainFragmentDirections.actionMainFragmentToShowGoalFragment(1)
         findNavController().navigate(action)

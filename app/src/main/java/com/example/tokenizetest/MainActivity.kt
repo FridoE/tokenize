@@ -21,10 +21,8 @@ class MainActivity : AppCompatActivity() {
 //        }
         @Suppress("UNUSED_VARIABLE")
         val binding = DataBindingUtil.setContentView<MainActivityBinding>(this, R.layout.main_activity)
-        // TODO (06) Initialize drawerLayout var from binding
         val navController = this.findNavController(R.id.myNavHostFragment)
         appBarConfiguration = AppBarConfiguration(navController.graph)
-        // TODO (07) Add the DrawerLayout as the second parameter to setupActionBarWithNavController
         NavigationUI.setupActionBarWithNavController(this, navController)
     }
 
