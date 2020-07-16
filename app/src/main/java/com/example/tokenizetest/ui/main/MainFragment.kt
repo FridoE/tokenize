@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tokenizetest.R
+import com.example.tokenizetest.data.Goal
 
 class MainFragment : Fragment() {
 

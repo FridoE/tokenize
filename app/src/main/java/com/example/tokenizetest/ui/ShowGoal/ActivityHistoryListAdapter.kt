@@ -1,45 +1,51 @@
-package com.example.tokenizetest.ui.main
+package com.example.tokenizetest.ui.showgoal
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tokenizetest.R
+import com.example.tokenizetest.data.Goal
 import java.util.*
 
-class ActivityHistoryListAdapter : ListAdapter<ActivityHistoryListItemVM, ActivityHistoryListAdapter.ViewHolder>(ActivityHistoryListItemVMDiffCallback()) {
+class ActivityHistoryListAdapter(val onclickListener: (ActivityHistoryListItemVM) -> Unit) : ListAdapter<ActivityHistoryListItemVM, ActivityHistoryListAdapter.ViewHolder>(
+    ActivityHistoryListItemVMDiffCallback()
+) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.activityhistorylist_entry, parent, false)
-        return ViewHolder(itemView)
+        return ViewHolder(
+            itemView
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val activityHistoryListItemVM = getItem(position)
-        holder.historyText?.text = activityHistoryListItemVM.historyText
-//        holder.bind(activityHistoryListItemVM, onclickListener)
+        holder.historyDateText?.text = activityHistoryListItemVM.historyDateText
+        holder.bind(activityHistoryListItemVM, onclickListener)
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        var historyText: TextView? = null
-        init {
-            historyText = itemView.findViewById(R.id.activityhistorylist_text)
-        }
-        fun bind(activityVM: TokenizedActivityViewModel, ocl: (TokenizedActivityViewModel) -> Unit) {
-//            itemView.setOnClickListener{ocl(activityVM)}
+        val historyDateText: TextView? = itemView.findViewById(R.id.activityhistorydate_text)
+        val removeButton: ImageButton? = itemView.findViewById(R.id.removeHLI_button)
+
+        fun bind(activityHLIVM: ActivityHistoryListItemVM, ocl: (ActivityHistoryListItemVM) -> Unit) {
+            removeButton?.setOnClickListener{ocl(activityHLIVM)}
         }
     }
 }
 
-
-
-class ActivityHistoryListItemVM(val _act: Goal.TokenizedActivity, val _date: Date) {
-    val historyText = "${_date.toString()} -> ${_act.name}"
+class ActivityHistoryListItemVM(val act: Goal.TokenizedActivity, val date: Date) {
+    val historyDateText = "${date.toString()}"
+//    val activity = _act
+//    val date = _date
 }
 
 class ActivityHistoryListItemVMDiffCallback : DiffUtil.ItemCallback<ActivityHistoryListItemVM>() {

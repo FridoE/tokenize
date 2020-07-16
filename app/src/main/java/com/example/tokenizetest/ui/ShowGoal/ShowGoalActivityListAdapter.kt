@@ -1,4 +1,4 @@
-package com.example.tokenizetest.ui.main
+package com.example.tokenizetest.ui.showgoal
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,14 +9,18 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tokenizetest.R
 
-class ShowGoalActivityListAdapter(val onclickListener: (TokenizedActivityViewModel) -> Unit) : ListAdapter<TokenizedActivityViewModel, ShowGoalActivityListAdapter.ViewHolder>(TokenizedActivityViewModelDiffCallback()) {
+class ShowGoalActivityListAdapter(val onclickListener: (TokenizedActivityViewModel) -> Unit) : ListAdapter<TokenizedActivityViewModel, ShowGoalActivityListAdapter.ViewHolder>(
+    TokenizedActivityViewModelDiffCallback()
+) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.activitylist_entry, parent, false)
-        return ViewHolder(itemView)
+        return ViewHolder(
+            itemView
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

@@ -17,7 +17,9 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_mainFragment_to_showGoalFragment"
-            app:destination="@id/showGoalFragment" />
+            app:destination="@id/showGoalFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/addgoal_fragement"
@@ -41,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/showGoalFragment"
-        android:name="com.example.tokenizetest.ui.main.ShowGoalFragment"
+        android:name="com.example.tokenizetest.ui.showgoal.ShowGoalFragment"
         android:label="ShowGoalFragment" >
         <argument
             android:name="goalID"

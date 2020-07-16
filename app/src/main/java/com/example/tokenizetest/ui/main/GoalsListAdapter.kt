@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tokenizetest.R
+import com.example.tokenizetest.data.Goal
 import de.hdodenhof.circleimageview.CircleImageView
 
 

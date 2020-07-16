@@ -1,11 +1,10 @@
-package com.example.tokenizetest.ui.main
+package com.example.tokenizetest.ui.showgoal
 
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import com.example.tokenizetest.R
 
 class ActivityDoneDialog(var activityVM: TokenizedActivityViewModel, var showGoalVM: ShowGoalViewModel) : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
