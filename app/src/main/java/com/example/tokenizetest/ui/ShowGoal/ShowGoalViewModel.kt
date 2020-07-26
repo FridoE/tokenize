@@ -10,9 +10,7 @@ import com.example.tokenizetest.data.notifyObserver
 class ShowGoalViewModel(val app: Application, val _goal: Goal) : AndroidViewModel(app) {
     private val _activityVMList = MutableLiveData<MutableList<TokenizedActivityViewModel>>()
     private val _activityHistoryList = MutableLiveData<MutableList<ActivityHistoryListItemVM>>()
-    //TODO: replace _goalsListItemVM calls by _goal calls
-/*    private var _goalsListItemVM =
-        GoalsListItemViewModel(app, _goal)*/
+
     val activityList: LiveData<MutableList<TokenizedActivityViewModel>>
         get() = _activityVMList
     val activityHistoryList: LiveData<MutableList<ActivityHistoryListItemVM>>
@@ -45,10 +43,6 @@ class ShowGoalViewModel(val app: Application, val _goal: Goal) : AndroidViewMode
         _goal.logActivity(activityVM.id)
         if(_goal.goalReached) _goalReached.value = true
 
-/*
-        _goalsListItemVM =
-            GoalsListItemViewModel(app, _goal)
-*/
         val activity = _goal.activities.find { it.id==activityVM.id }
         activity?.let {
             _activityHistoryList.value?.add(
@@ -59,8 +53,6 @@ class ShowGoalViewModel(val app: Application, val _goal: Goal) : AndroidViewMode
             )
             _activityHistoryList.notifyObserver()
         }
-
-        //= _goal.activityHistoryMap.map { it.keys.flatMap { key -> (it[key] ?: error("activityHistoryMap has no values")).map { item -> ActivityHistoryListItemVM(key, item) } }}.flatten().toMutableList()  //.forEach { historyItem -> ActivityHistoryListItemVM(key, historyItem) } } } //_goal.activities.map {ac -> ac.log.map { ActivityHistoryListItemVM(ac, it) }}.flatten().toMutableList()
     }
 
     fun removeActivityHistoryItem(ahvm: ActivityHistoryListItemVM) {
@@ -68,8 +60,6 @@ class ShowGoalViewModel(val app: Application, val _goal: Goal) : AndroidViewMode
         _activityHistoryList.value?.remove(ahvm)
         Log.d("deleteHI", "showgoalviewmodel")
         _activityHistoryList.notifyObserver()
-/*        _goalsListItemVM =
-            GoalsListItemViewModel(app, _goal)*/
         _goalReached.value = _goal.goalReached
     }
 
