@@ -9,7 +9,7 @@ import java.util.*
 class Goal(
     text: String,
     var price: Int,
-    var icon: Icon,
+    var iconName: String,
     activityName: String,
     activityEarnings: Int
 ) {
