@@ -4,10 +4,11 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.tokenizetest.data.Goal
+import com.example.tokenizetest.data.Repository
 import com.example.tokenizetest.ui.main.GoalsListItemViewModel
 import com.example.tokenizetest.data.notifyObserver
 
-class ShowGoalViewModel(val app: Application, val _goal: Goal) : AndroidViewModel(app) {
+class ShowGoalViewModel(val app: Application, val goalID: Int) : AndroidViewModel(app) {
     private val _activityVMList = MutableLiveData<MutableList<TokenizedActivityViewModel>>()
     private val _activityHistoryList = MutableLiveData<MutableList<ActivityHistoryListItemVM>>()
 
@@ -19,6 +20,9 @@ class ShowGoalViewModel(val app: Application, val _goal: Goal) : AndroidViewMode
     var _goalReached = MutableLiveData<Boolean>(false)
     val goalReached: MutableLiveData<Boolean>
         get() = _goalReached
+
+    private var _goal: Goal = Repository.findById(goalID)?: Goal()
+    val goalIconName = _goal.iconName
 
     init {
         _activityVMList.value =  _goal.activities.map {
@@ -74,15 +78,12 @@ class ShowGoalViewModel(val app: Application, val _goal: Goal) : AndroidViewMode
 }
 
 class ShowGoalViewModelFactory(
-    private val application: Application, val goal: Goal
+    private val application: Application, val goalID: Int
 ) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ShowGoalViewModel::class.java)) {
-            return ShowGoalViewModel(
-                application,
-                goal
-            ) as T
+            return ShowGoalViewModel(application, goalID) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

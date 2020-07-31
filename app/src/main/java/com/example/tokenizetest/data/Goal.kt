@@ -7,11 +7,11 @@ import androidx.lifecycle.MutableLiveData
 import java.util.*
 
 class Goal(
-    text: String,
-    var price: Int,
-    var iconName: String,
-    activityName: String,
-    activityEarnings: Int
+    text: String = "",
+    var price: Int = 0,
+    var iconName: String = "",
+    activityName: String = "",
+    activityEarnings: Int = 0
 ) {
     var balance: Int = 0
     var name: String = text

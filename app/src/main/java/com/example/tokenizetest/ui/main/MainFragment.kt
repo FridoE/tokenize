@@ -3,6 +3,7 @@ package com.example.tokenizetest.ui.main
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -70,7 +71,7 @@ class MainFragment : Fragment() {
 
     fun goalsListItemClickListener(g: Goal) {
         Toast.makeText(this.context, "Click ${g.id}", Toast.LENGTH_LONG).show()
-        val action = MainFragmentDirections.actionMainFragmentToShowGoalFragment(1)
+        val action = MainFragmentDirections.actionMainFragmentToShowGoalFragment(g.id)
         findNavController().navigate(action)
     }
 }

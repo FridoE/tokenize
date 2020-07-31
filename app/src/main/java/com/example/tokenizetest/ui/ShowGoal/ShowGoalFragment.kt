@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tokenizetest.R
@@ -22,6 +23,8 @@ class ShowGoalFragment : Fragment() {
     private lateinit var showgoalViewModel: ShowGoalViewModel
     private lateinit var binding: GoalFragmentBinding
     private lateinit var rootView: View
+    val args: ShowGoalFragmentArgs by navArgs()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,16 +47,7 @@ class ShowGoalFragment : Fragment() {
         showgoalViewModel = activity?.run {
             ViewModelProvider(this,
                 ShowGoalViewModelFactory(
-                    this.application,
-                    Goal(
-                        "test",
-                        100,
-                        Icon.createWithResource(this.applicationContext, R.drawable.reward),
-                        "asdf",
-                        10
-                    )
-                )
-            ).get(ShowGoalViewModel::class.java)
+                    this.application,args.goalID)).get(ShowGoalViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
         // TODO: create view model with goal id -> load data from model/repository
         // TODO: create goal reached message at the bottom of the screen
@@ -70,13 +64,15 @@ class ShowGoalFragment : Fragment() {
             Log.d("deleteHI", "showgoalfragment")
         })
 
-        showgoalViewModel.goalReached.observe(this.viewLifecycleOwner, Observer { if(it == true) onGoalReached()})
+        showgoalViewModel.goalReached.observe(this.viewLifecycleOwner, Observer { if(it) onGoalReached()})
 
         listView.layoutManager = LinearLayoutManager(this.context)
         listView.adapter = activityListAdapter
         activityHistoryView.layoutManager = LinearLayoutManager(this.context)
         activityHistoryView.adapter = activityHistoryListAdapter
 
+        //TODO: load the correct item for the goal
+        binding.imageIconGoal.setImageIcon(getIconFromResName(showgoalViewModel.goalIconName, requireContext()))
         return rootView
     }
 

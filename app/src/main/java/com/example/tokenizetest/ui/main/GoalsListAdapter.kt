@@ -1,5 +1,6 @@
 package com.example.tokenizetest.ui.main
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,13 +23,15 @@ class GoalsListAdapter(val onclickListener: (Goal) -> Unit): ListAdapter<GoalsLi
         return GoalsListAdapter.ViewHolder(itemView)
     }
 
+
     override fun onBindViewHolder(holder: GoalsListAdapter.ViewHolder, position: Int) {
         val goalVM = getItem(position)
         holder.textGoal?.text = goalVM.titleString
         holder.textProgress?.text = goalVM.balanceString
         holder.progressBalance?.progress = goalVM.progress
-        holder.iconImageView?.setImageIcon(goalVM.icon)
+        holder.iconImageView?.setImageIcon(getIconFromResName(goalVM.iconName, holder.iconImageView?.context!!))
         holder.bind(goalVM.goal, onclickListener)
+
     }
 
     class ViewHolder(val _itemView: View): RecyclerView.ViewHolder(_itemView) {

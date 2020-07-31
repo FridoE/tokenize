@@ -6,19 +6,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.tokenizetest.R
 
-class Repository {
-    lateinit var _goals: MutableLiveData<MutableList<Goal>>
+object Repository {
+    private var _goals: MutableLiveData<MutableList<Goal>> = MutableLiveData()
     val goals: LiveData<MutableList<Goal>>
         get() = _goals
 
     init {
-        var newGoal = Goal("Smartwatch", 500, "smartwatch.jpg", "Activity 1", 5)
-        var secondGoal = Goal("Fernseher", 350, "reward.png", "Act2", 10)
-        _goals.value = mutableListOf<Goal>()
-        insert (newGoal)
-        insert (secondGoal)
+    _goals.value = mutableListOf<Goal>()
 
-        //TODO: observe goals for new/updated items in the list?
+    var newGoal = Goal("Smartwatch", 500, "smartwatch", "Activity 1", 5)
+    var secondGoal = Goal("Fernseher", 350, "reward", "Act2", 10)
+    newGoal.balance = 150
+    secondGoal.balance = 80
+    insert (newGoal)
+    insert (secondGoal)
+    //TODO: observe goals for new/updated items in the list?
     }
     fun insert(g: Goal) {
         _goals.value?.add(g)
@@ -31,5 +33,9 @@ class Repository {
     }
     fun delete(g: Goal) {
         _goals.value?.removeIf { it.id == g.id }
+    }
+
+    fun findById(gid: Int): Goal? {
+        return _goals.value?.find { it.id == gid }
     }
 }

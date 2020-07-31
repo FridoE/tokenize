@@ -9,6 +9,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.tokenizetest.R
 import com.example.tokenizetest.data.Goal
+import com.example.tokenizetest.data.Repository
 import java.util.*
 import java.util.stream.Collectors.toMap
 
@@ -20,19 +21,20 @@ class GoalsListViewModel(val app: Application) : AndroidViewModel(app) {
 
     var newGoalName: String = ""
     var newGoalPrice: Int = 0
-    var newGoalIcon: Icon = Icon.createWithResource(app.applicationContext, R.drawable.reward)
+    var newGoalIconName: String = "reward.png"
     var newGoalActivityName: String = ""
     var newGoalActivityEarnings: Int = 0
 
     init {
-        _goalsList.value = mutableListOf<GoalsListItemViewModel>()
-
-        var newGoal = Goal("Smartwatch", 500, Icon.createWithResource(app.applicationContext, R.drawable.smartwatch), "Act1", 5)
+        //_goalsList.value = mutableListOf<GoalsListItemViewModel>()
+        _goalsList.value = Repository.goals.value?.map {
+            GoalsListItemViewModel(app, it)}?.toMutableList()
+/*        var newGoal = Goal("Smartwatch", 500, "smartwatch", "Act1", 5)
         newGoal.balance = 150
         addGoal(GoalsListItemViewModel(app, newGoal))
-        var secondGoal = Goal("Fernseher", 350, newGoalIcon, "Act2", 10)
+        var secondGoal = Goal("Fernseher", 350, "reward", "Act2", 10)
         secondGoal.balance = 80
-        addGoal(GoalsListItemViewModel(app, secondGoal))
+        addGoal(GoalsListItemViewModel(app, secondGoal))*/
     }
 
     private fun addGoal(goal: GoalsListItemViewModel) = _goalsList.value?.add(goal)
@@ -42,14 +44,14 @@ class GoalsListViewModel(val app: Application) : AndroidViewModel(app) {
             Goal(
             newGoalName,
             newGoalPrice,
-            newGoalIcon,
+            newGoalIconName,
             newGoalActivityName,
             newGoalActivityEarnings)
         )
         addGoal(goal)
         newGoalName = ""
         newGoalPrice = 0
-        newGoalIcon = Icon.createWithResource(app.applicationContext, R.drawable.reward)
+        newGoalIconName = "reward"
         newGoalActivityName = ""
         newGoalActivityEarnings = 0
     }
@@ -76,7 +78,7 @@ class GoalsListItemViewModel(
     val balance = format.format(_goal.balance)
     val balanceString = "Balance: ${balance} (${progress}%)"
     val titleString = "$name ($price)"
-    val icon = _goal.icon
+    val iconName = _goal.iconName
 }
 
 
