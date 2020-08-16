@@ -15,7 +15,7 @@ class Goal(
 ) {
     var balance: Int = 0
     var name: String = text
-    val id: Int
+    val id: Long
     var goalReached = false
     var activities = mutableListOf<TokenizedActivity>()
 
@@ -39,6 +39,7 @@ class Goal(
     fun logActivity(activityId : Int, date: Date = Calendar.getInstance().time) {
         activities.find{it.id == activityId}?.let {
             it.log?.add(date)
+            Log.d("tokenizedactivity", "created activity id: "+id.toString())
             balance += it.earnings
             if(balance >= price)
                 goalReached = true
@@ -59,7 +60,7 @@ class Goal(
     data class TokenizedActivity(var name: String, var earnings: Int) {
         var log: MutableList<Date> = mutableListOf<Date>()
         val id = nextId++
-        private companion object {var nextId = 1}
+        private companion object {var nextId = 1L}
     }
 }
 

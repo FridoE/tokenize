@@ -21,7 +21,7 @@ class GoalsListViewModel(val app: Application) : AndroidViewModel(app) {
 
     var newGoalName: String = ""
     var newGoalPrice: Int = 0
-    var newGoalIconName: String = "reward.png"
+    var newGoalIconName: String = "reward"
     var newGoalActivityName: String = ""
     var newGoalActivityEarnings: Int = 0
 
@@ -37,7 +37,10 @@ class GoalsListViewModel(val app: Application) : AndroidViewModel(app) {
         addGoal(GoalsListItemViewModel(app, secondGoal))*/
     }
 
-    private fun addGoal(goal: GoalsListItemViewModel) = _goalsList.value?.add(goal)
+    private fun addGoal(goal: GoalsListItemViewModel) {
+        Repository.insert(goal._goal)
+        _goalsList.value?.add(goal)
+    }
     fun addNewGoal() {
         val goal = GoalsListItemViewModel(
             app,

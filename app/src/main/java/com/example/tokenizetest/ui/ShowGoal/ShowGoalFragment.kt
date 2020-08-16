@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
@@ -32,6 +34,7 @@ class ShowGoalFragment : Fragment() {
     ): View? {
         binding = GoalFragmentBinding.inflate(inflater)
         binding.lifecycleOwner = this
+        var test: MutableLiveData<Boolean> = MutableLiveData(false)
         rootView = binding.root //inflater.inflate(R.layout.goal_fragment, container, false)
         val listView = rootView.findViewById<RecyclerView>(R.id.activityList)
         val activityHistoryView = rootView.findViewById<RecyclerView>(R.id.activityHistoryList)
@@ -42,15 +45,15 @@ class ShowGoalFragment : Fragment() {
         val activityHistoryListAdapter =
             ActivityHistoryListAdapter({ ahlivm: ActivityHistoryListItemVM ->
                 onClickRemoveActivityHistoryItem(ahlivm)
-            })
+            }, { ahlivm: ActivityHistoryListItemVM ->
+                onLongClickActivityHistoryItem(ahlivm)
+            }, test)//TODO: livedata
 
         showgoalViewModel = activity?.run {
             ViewModelProvider(this,
                 ShowGoalViewModelFactory(
                     this.application,args.goalID)).get(ShowGoalViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
-        // TODO: create view model with goal id -> load data from model/repository
-        // TODO: create goal reached message at the bottom of the screen
         // TODO: implement delete history items
 
         binding.gvm = showgoalViewModel
@@ -71,7 +74,6 @@ class ShowGoalFragment : Fragment() {
         activityHistoryView.layoutManager = LinearLayoutManager(this.context)
         activityHistoryView.adapter = activityHistoryListAdapter
 
-        //TODO: load the correct item for the goal
         binding.imageIconGoal.setImageIcon(getIconFromResName(showgoalViewModel.goalIconName, requireContext()))
         return rootView
     }
@@ -93,6 +95,10 @@ class ShowGoalFragment : Fragment() {
 
     fun onClickRemoveActivityHistoryItem(activityHLIVM: ActivityHistoryListItemVM) {
         showgoalViewModel.removeActivityHistoryItem(activityHLIVM)
+    }
+
+    fun onLongClickActivityHistoryItem(activityHLIVM: ActivityHistoryListItemVM): Boolean {
+        return true
     }
 
 }

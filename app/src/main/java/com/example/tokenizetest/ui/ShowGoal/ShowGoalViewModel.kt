@@ -24,6 +24,10 @@ class ShowGoalViewModel(val app: Application, val goalID: Int) : AndroidViewMode
     private var _goal: Goal = Repository.findById(goalID)?: Goal()
     val goalIconName = _goal.iconName
 
+    var _longPressOnHistoryItem  = MutableLiveData<Boolean>(false)
+    val longPressOnHistoryItem: MutableLiveData<Boolean>
+        get() = _longPressOnHistoryItem
+
     init {
         _activityVMList.value =  _goal.activities.map {
             TokenizedActivityViewModel(
@@ -37,18 +41,14 @@ class ShowGoalViewModel(val app: Application, val goalID: Int) : AndroidViewMode
                 it
             )
         }}.flatten().toMutableList()
-
-        activityList!!.value!!.last().let { doneActivity(it)}
-        activityList!!.value!!.last().let { doneActivity(it)}
-
     }
 
     fun doneActivity(activityVM: TokenizedActivityViewModel) {
-        _goal.logActivity(activityVM.id)
-        if(_goal.goalReached) _goalReached.value = true
-
         val activity = _goal.activities.find { it.id==activityVM.id }
         activity?.let {
+            _goal.logActivity(activityVM.id)
+            if(_goal.goalReached) _goalReached.value = true
+
             _activityHistoryList.value?.add(
                 ActivityHistoryListItemVM(
                     it,
@@ -56,15 +56,18 @@ class ShowGoalViewModel(val app: Application, val goalID: Int) : AndroidViewMode
                 )
             )
             _activityHistoryList.notifyObserver()
+            Repository.update(_goal)
         }
     }
 
     fun removeActivityHistoryItem(ahvm: ActivityHistoryListItemVM) {
+        //TODO: ask for longpress active
         _goal.removeActivityFromLog(ahvm.act.id, ahvm.date)
         _activityHistoryList.value?.remove(ahvm)
         Log.d("deleteHI", "showgoalviewmodel")
         _activityHistoryList.notifyObserver()
         _goalReached.value = _goal.goalReached
+        Repository.update(_goal)
     }
 
     val titleGoal:String

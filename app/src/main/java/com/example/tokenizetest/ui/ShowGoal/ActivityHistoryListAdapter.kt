@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +14,9 @@ import com.example.tokenizetest.R
 import com.example.tokenizetest.data.Goal
 import java.util.*
 
-class ActivityHistoryListAdapter(val onclickListener: (ActivityHistoryListItemVM) -> Unit) : ListAdapter<ActivityHistoryListItemVM, ActivityHistoryListAdapter.ViewHolder>(
+class ActivityHistoryListAdapter(val onclickListener: (ActivityHistoryListItemVM) -> Unit,
+                                 val onLongClickListener: (ActivityHistoryListItemVM) -> Boolean,
+                                 val longPressActive: LiveData<Boolean> ) : ListAdapter<ActivityHistoryListItemVM, ActivityHistoryListAdapter.ViewHolder>(
     ActivityHistoryListItemVMDiffCallback()
 ) {
     override fun onCreateViewHolder(
@@ -21,6 +24,7 @@ class ActivityHistoryListAdapter(val onclickListener: (ActivityHistoryListItemVM
         viewType: Int
     ): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.activityhistorylist_entry, parent, false)
+       // longPressActive.observe(Observer { o, arg ->  })
         return ViewHolder(
             itemView
         )
@@ -30,6 +34,7 @@ class ActivityHistoryListAdapter(val onclickListener: (ActivityHistoryListItemVM
         val activityHistoryListItemVM = getItem(position)
         holder.historyDateText?.text = activityHistoryListItemVM.historyDateText
         holder.bind(activityHistoryListItemVM, onclickListener)
+        holder.itemView.setOnLongClickListener{onLongClickListener(activityHistoryListItemVM)}
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
