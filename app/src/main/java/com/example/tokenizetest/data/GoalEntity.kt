@@ -10,6 +10,7 @@ data class GoalEntity(
     var name: String,
     var price: Int,
     var balance: Int
+    var iconName: String
 )
 
 @Entity(foreignKeys = [ForeignKey(entity = GoalEntity::class,
@@ -99,6 +100,20 @@ object GoalMapper: Mapper<GoalAndActivities, Goal> {
     }
 
     override fun toDomainModel(entity: GoalAndActivities): Goal {
-        TODO("Not yet implemented")
+        var goal = Goal("Error", 100, "error")
+        goal = entity.goal?.let {
+            Goal(it.goalID, it.name, it.price, it.balance, it.iconName)
+        }
+        entity.activities?.forEach { activityAndHistoryItem ->
+            //todo. add tokenized actiity
+            val activity = activityAndHistoryItem.activity?.let {
+                Goal.TokenizedActivity(it.activityID,it.name, it.earnings))
+            }
+            goal.activities?.add(activity
+        }
+        }
+
+        }
+        return goal
     }
 }
