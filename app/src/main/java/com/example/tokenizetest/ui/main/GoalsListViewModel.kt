@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright © 2020 F. Engel
 package com.example.tokenizetest.ui.main
 
 import android.app.Application
@@ -10,6 +12,11 @@ import androidx.lifecycle.*
 import com.example.tokenizetest.R
 import com.example.tokenizetest.data.Goal
 import com.example.tokenizetest.data.Repository
+import com.example.tokenizetest.data.notifyObserver
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.*
 import java.util.stream.Collectors.toMap
 
@@ -19,27 +26,44 @@ class GoalsListViewModel(val app: Application) : AndroidViewModel(app) {
     val goalsList: LiveData<MutableList<GoalsListItemViewModel>>
         get() = _goalsList
 
+    private var viewModelJob = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
     var newGoalName: String = ""
     var newGoalPrice: Int = 0
     var newGoalIconName: String = "reward"
     var newGoalActivityName: String = ""
     var newGoalActivityEarnings: Int = 0
+    private val repository = Repository.getInstance(app.applicationContext)
 
     init {
         //_goalsList.value = mutableListOf<GoalsListItemViewModel>()
-        _goalsList.value = Repository.goals.value?.map {
-            GoalsListItemViewModel(app, it)}?.toMutableList()
+        uiScope.launch {
+            _goalsList.value = repository.getAllGoals().map {
+                GoalsListItemViewModel(app, it)
+            }.toMutableList()
+            
+            //addGoal(GoalsListItemViewModel(app, newGoal))
+            //addGoal(GoalsListItemViewModel(app, secondGoal))
+        }
 /*        var newGoal = Goal("Smartwatch", 500, "smartwatch", "Act1", 5)
         newGoal.balance = 150
         addGoal(GoalsListItemViewModel(app, newGoal))
         var secondGoal = Goal("Fernseher", 350, "reward", "Act2", 10)
         secondGoal.balance = 80
         addGoal(GoalsListItemViewModel(app, secondGoal))*/
+        //var newGoal = Goal("Smartwatch", 500, "smartwatch", "Activity 1", 5)
+        //var secondGoal = Goal("Fernseher", 350, "reward", "Act2", 10)
+        //newGoal.balance = 150
+        //secondGoal.balance = 80
     }
 
     private fun addGoal(goal: GoalsListItemViewModel) {
-        Repository.insert(goal._goal)
+        uiScope.launch {
+            repository.insert(goal.goal)
+        }
         _goalsList.value?.add(goal)
+        _goalsList.notifyObserver()
     }
     fun addNewGoal() {
         val goal = GoalsListItemViewModel(
@@ -58,6 +82,14 @@ class GoalsListViewModel(val app: Application) : AndroidViewModel(app) {
         newGoalActivityName = ""
         newGoalActivityEarnings = 0
     }
+
+    fun deleteGoal(goal: GoalsListItemViewModel) {
+        uiScope.launch {
+            repository.delete(goal.goal)
+        }
+        _goalsList.value?.remove(goal)
+        _goalsList.notifyObserver()
+    }
 }
 
 class GoalsListItemViewModel(
@@ -72,6 +104,8 @@ class GoalsListItemViewModel(
     }
 
     val goal = _goal
+    var selectedForDeletion = false
+
     val name = _goal.name
     val price = format.format(_goal.price)
 

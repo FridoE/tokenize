@@ -1,22 +1,26 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright © 2020 F. Engel
 package com.example.tokenizetest.ui.main
 
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil.setContentView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tokenizetest.R
-import com.example.tokenizetest.data.Goal
+import com.example.tokenizetest.databinding.MainActivityBinding
+
 
 class MainFragment : Fragment() {
 
@@ -24,14 +28,26 @@ class MainFragment : Fragment() {
         fun newInstance() = MainFragment()
     }
 
-    val listGoals = ArrayList<GoalsListViewModel>()
-    //val testGoal = GoalsViewModel("Smartwatch", 300)
-
     private lateinit var goalListViewModel: GoalsListViewModel
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        goalListViewModel = activity?.run {
+            ViewModelProvider(this).get(GoalsListViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
+
+        /*val binding: MainActivityBinding = DataBindingUtil.setContentView(activity!!, R.layout.main_activity)
+
+        val navHost = activity?.supportFragmentManager?.findFragmentById(R.id.myNavHostFragment) as NavHostFragment
+        val navController = navHost.navController
+        val navInflater = navController.navInflater
+        val graph = navInflater.inflate(R.navigation.navigation)
+        if (goalListViewModel.goalsList.value == null) {
+            graph.startDestination = R.id.addgoal_fragement
+        } else {
+            graph.startDestination = R.id.mainFragment
+        }
+        navController.graph = graph*/
     }
 
     override fun onCreateView(
@@ -40,20 +56,22 @@ class MainFragment : Fragment() {
     ): View {
         val rootView = inflater.inflate(R.layout.main_fragment, container, false)
         val listView = rootView.findViewById<RecyclerView>(R.id.listGoals)
-        val adapter = GoalsListAdapter({g: Goal -> goalsListItemClickListener(g)})
+        val adapter = GoalsListAdapter({ gvm: GoalsListItemViewModel ->
+            OnClickSelectGoalListItem(
+                gvm
+            )
+        }, { gvm: GoalsListItemViewModel -> OnClickDeleteGoalsListItem(gvm) })
 
-        goalListViewModel = activity?.run {
-            ViewModelProvider(this).get(GoalsListViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
-
-        goalListViewModel.goalsList.observe(this.viewLifecycleOwner, Observer { list -> adapter.submitList(list) })
+        goalListViewModel.goalsList.observe(this.viewLifecycleOwner, Observer { list ->
+            adapter.submitList(list)
+            adapter.notifyDataSetChanged()
+        })
 
         listView.layoutManager = LinearLayoutManager(this.context)
-
         listView.adapter = adapter
 
-        val addgoal_btn = rootView.findViewById<Button>(R.id.addgoal_button)
-        addgoal_btn.setOnClickListener {
+        val addgoalBtn = rootView.findViewById<Button>(R.id.addgoal_button)
+        addgoalBtn.setOnClickListener {
             val action = MainFragmentDirections.actionMainFragmentToAddgoalFragement()
             findNavController().navigate(action)
         }
@@ -67,12 +85,21 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val action = MainFragmentDirections.actionMainFragmentToAddgoalFragement()
+        if(goalListViewModel.goalsList.value?.size == 0)
+            findNavController().navigate(action)
+
     }
 
-    fun goalsListItemClickListener(g: Goal) {
-        Toast.makeText(this.context, "Click ${g.id}", Toast.LENGTH_LONG).show()
-        val action = MainFragmentDirections.actionMainFragmentToShowGoalFragment(g.id)
+    fun OnClickSelectGoalListItem(gvm: GoalsListItemViewModel) {
+        val action = MainFragmentDirections.actionMainFragmentToShowGoalFragment(gvm.id, gvm.name)
         findNavController().navigate(action)
+    }
+
+    fun OnClickDeleteGoalsListItem(gvm: GoalsListItemViewModel): Boolean {
+       //Toast.makeText(this.context, "Long Click", Toast.LENGTH_LONG).show()
+        goalListViewModel.deleteGoal(gvm)
+        return true
     }
 }
 

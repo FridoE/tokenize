@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright © 2020 F. Engel
 package com.example.tokenizetest.data
 
 import android.graphics.drawable.Icon
@@ -20,6 +22,7 @@ class Goal {
         this.name = name
         this.price = price
         this.iconName = iconName
+        this.goalReached = balance >= price
         if(activityName != "")
             activities.add(TokenizedActivity(activityName, activityEarnings))
     }
@@ -30,6 +33,7 @@ class Goal {
         this.balance = balance
         this.price = price
         this.iconName = iconName
+        this.goalReached = balance >= price
         if(activityName != "")
             activities.add(TokenizedActivity(activityName, activityEarnings))
     }

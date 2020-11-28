@@ -1,9 +1,9 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 <androidx.constraintlayout.widget.ConstraintLayout
-xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/frameLayout"
+    android:id="@+id/frameLayout"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context=".AddGoalFragment">
@@ -38,16 +38,16 @@ tools:context=".AddGoalFragment">
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent" />
 
-<TextView
-    android:id="@+id/textView3"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="32dp"
-    android:text="How much does the reward cost?"
-    android:textSize="18sp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/goal_textInputLayout" />
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="How much does the reward cost?"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/goal_textInputLayout" />
 
 <com.google.android.material.textfield.TextInputLayout
     android:id="@+id/price_textInputLayout"
@@ -74,29 +74,29 @@ tools:context=".AddGoalFragment">
         app:useCurrencySymbolAsHint="true" />
 </com.google.android.material.textfield.TextInputLayout>
 
-<de.hdodenhof.circleimageview.CircleImageView
-    android:id="@+id/imageView"
-    android:layout_width="145dp"
-    android:layout_height="106dp"
-    android:layout_marginTop="8dp"
-    android:src="@drawable/reward"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintHorizontal_bias="0.442"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/textView10"
-    tools:srcCompat="@drawable/reward" />
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageView"
+        android:layout_width="127dp"
+        android:layout_height="77dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/reward"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.442"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10"
+        tools:srcCompat="@drawable/reward" />
 
-<TextView
-    android:id="@+id/textView10"
-    android:layout_width="146dp"
-    android:layout_height="46dp"
-    android:layout_marginTop="48dp"
-    android:text="Select an icon:"
-    android:textAlignment="center"
-    android:textSize="18sp"
-    app:layout_constraintEnd_toEndOf="@+id/imageView"
-    app:layout_constraintStart_toStartOf="@+id/imageView"
-    app:layout_constraintTop_toBottomOf="@+id/price_textInputLayout" />
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="146dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="24dp"
+        android:text="Select an icon:"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/price_textInputLayout" />
 
 <Button
     android:id="@+id/addgoal_button_addgoal"

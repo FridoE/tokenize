@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright © 2020 F. Engel
 package com.example.tokenizetest.ui.showgoal
 
 import android.app.Application
@@ -7,21 +9,42 @@ import com.example.tokenizetest.data.Goal
 import com.example.tokenizetest.data.Repository
 import com.example.tokenizetest.ui.main.GoalsListItemViewModel
 import com.example.tokenizetest.data.notifyObserver
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
-class ShowGoalViewModel(val app: Application, val goalID: Int) : AndroidViewModel(app) {
+class ShowGoalViewModel(val app: Application, val goalID: Long) : AndroidViewModel(app) {
     private val _activityVMList = MutableLiveData<MutableList<TokenizedActivityViewModel>>()
     private val _activityHistoryList = MutableLiveData<MutableList<ActivityHistoryListItemVM>>()
-
+    private val repository = Repository.getInstance(app.applicationContext)
     val activityList: LiveData<MutableList<TokenizedActivityViewModel>>
         get() = _activityVMList
     val activityHistoryList: LiveData<MutableList<ActivityHistoryListItemVM>>
         get() = _activityHistoryList
 
+    /**
+     * viewModelJob allows us to cancel all coroutines started by this ViewModel.
+     */
+    private var viewModelJob = Job()
+    /**
+     * A [CoroutineScope] keeps track of all coroutines started by this ViewModel.
+     *
+     * Because we pass it [viewModelJob], any coroutine started in this uiScope can be cancelled
+     * by calling `viewModelJob.cancel()`
+     *
+     * By default, all coroutines started in uiScope will launch in [Dispatchers.Main] which is
+     * the main thread on Android. This is a sensible default because most coroutines started by
+     * a [ViewModel] update the UI after performing some processing.
+     */
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
+
     var _goalReached = MutableLiveData<Boolean>(false)
     val goalReached: MutableLiveData<Boolean>
         get() = _goalReached
 
-    private var _goal: Goal = Repository.findById(goalID)?: Goal()
+    private var _goal: Goal = repository.findById(goalID)?: Goal("error goalID="+goalID.toString(), 0, "error")
     val goalIconName = _goal.iconName
 
     var _longPressOnHistoryItem  = MutableLiveData<Boolean>(false)
@@ -56,7 +79,9 @@ class ShowGoalViewModel(val app: Application, val goalID: Int) : AndroidViewMode
                 )
             )
             _activityHistoryList.notifyObserver()
-            Repository.update(_goal)
+            uiScope.launch {
+                repository.logActivity(_goal, it.id)
+            }
         }
     }
 
@@ -67,7 +92,9 @@ class ShowGoalViewModel(val app: Application, val goalID: Int) : AndroidViewMode
         Log.d("deleteHI", "showgoalviewmodel")
         _activityHistoryList.notifyObserver()
         _goalReached.value = _goal.goalReached
-        Repository.update(_goal)
+        uiScope.launch {
+            repository.removeActivityHistoryItem(_goal, ahvm.act.id, ahvm.date)
+        }
     }
 
     val titleGoal:String
@@ -81,7 +108,7 @@ class ShowGoalViewModel(val app: Application, val goalID: Int) : AndroidViewMode
 }
 
 class ShowGoalViewModelFactory(
-    private val application: Application, val goalID: Int
+    private val application: Application, val goalID: Long
 ) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

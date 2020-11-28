@@ -1,5 +1,8 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright © 2020 F. Engel
 package com.example.tokenizetest.data
 
+import android.app.Activity
 import androidx.room.*
 import androidx.room.ForeignKey.CASCADE
 import java.util.*
@@ -9,20 +12,27 @@ data class GoalEntity(
     @PrimaryKey var goalID: Long,
     var name: String,
     var price: Int,
-    var balance: Int
+    var balance: Int,
     var iconName: String
-)
+) {
+    //constructor(goalID: Long, name: String, price: Int, balance: Int, iconName: String, activities: List<ActivityEntity>) : this(goalID, name, price, balance, iconName, listOf<ActivityEntity>())
+    @Ignore
+    var activities: List <ActivityEntity> = listOf<ActivityEntity>()
+}
 
 @Entity(foreignKeys = [ForeignKey(entity = GoalEntity::class,
-        parentColumns = ["goalId"],
-    childColumns = ["goalId"],
+        parentColumns = ["goalID"],
+    childColumns = ["goalID"],
     onDelete = CASCADE)])
 data class ActivityEntity(
     @PrimaryKey var activityID: Long,
     var goalID: Long,
     var name: String,
     var earnings: Int
-)
+) {
+    @Ignore
+    var historyItems: List <ActivityHistoryEntity> = listOf<ActivityHistoryEntity>() //TODO: https://stackoverflow.com/questions/44667160/android-room-insert-relation-entities-using-room
+}
 
 
 @Entity(
@@ -43,7 +53,7 @@ class ActivitiesAndActivityHistoryEntities {
     @Embedded
     var activity: ActivityEntity? = null
 
-    @Relation(parentColumn = "goalAndActivityID", entityColumn = "goalAndActivityID", entity = ActivityHistoryEntity::class)
+    @Relation(parentColumn = "activityID", entityColumn = "activityID", entity = ActivityHistoryEntity::class)
     var activityhistoryentities: List<ActivityHistoryEntity>? = null
 }
 
@@ -51,25 +61,20 @@ class GoalAndActivities {
     @Embedded
     var goal: GoalEntity? = null
 
-    @Relation(parentColumn = "goalID", entityColumn = "goalID", entity = ActivitiesAndActivityHistoryEntities::class)
+    @Relation(parentColumn = "goalID", entityColumn = "goalID", entity = ActivityEntity::class)
     var activities: List<ActivitiesAndActivityHistoryEntities>? = null
 }
 
-interface GoalAndActivitiesDao {
-    @Insert
-    fun insertGoalAndActivities(vararg goalandact: GoalAndActivities)
+class Converters {
+    @TypeConverter
+    fun fromTimestamp(value: Long): Date {
+        return Date(value)
+    }
 
-    @Update
-    fun updateGoalAndActivities(vararg goalandact: GoalAndActivities)
-
-    @Delete
-    fun deleteGoalAndActivities(vararg goalandact: GoalAndActivities)
-
-    @Query("SELECT * from GoalEntity")
-    fun loadAllGoalsAndActivities(): Array<GoalAndActivities>
-
-    @Query("SELECT * from GoalEntity WHERE goalID= :goalID")
-    fun loadGoalAndActivity(goalID: Long): GoalAndActivities
+    @TypeConverter
+    fun dateToTimestamp(date: Date): Long {
+        return date.time.toLong()
+    }
 }
 
 interface Mapper<Entity, DomainModel> {
@@ -77,7 +82,7 @@ interface Mapper<Entity, DomainModel> {
     fun toDomainModel(entity: Entity): DomainModel
 }
 
-object GoalMapper: Mapper<GoalAndActivities, Goal> {
+/*object GoalMapper: Mapper<GoalAndActivities, Goal> {
     override fun toEntity(domainmodel: Goal): GoalAndActivities {
         var entity = GoalAndActivities()
         var activityEntityList = mutableListOf<ActivitiesAndActivityHistoryEntities>()
@@ -85,7 +90,7 @@ object GoalMapper: Mapper<GoalAndActivities, Goal> {
         var actAndActHistory = ActivitiesAndActivityHistoryEntities()
         var activityHistoryEntities = mutableListOf<ActivityHistoryEntity>()
 
-        entity.goal = GoalEntity(domainmodel.id, domainmodel.name, domainmodel.price, domainmodel.balance)
+        entity.goal = GoalEntity(domainmodel.id, domainmodel.name, domainmodel.price, domainmodel.balance, domainmodel.iconName)
         domainmodel.activities.forEach {
             actAndActHistory.activity = ActivityEntity(it.id, domainmodel.id, it.name, it.earnings)
             activityHistoryEntities = mutableListOf<ActivityHistoryEntity>()
@@ -103,17 +108,51 @@ object GoalMapper: Mapper<GoalAndActivities, Goal> {
         var goal = Goal("Error", 100, "error")
         goal = entity.goal?.let {
             Goal(it.goalID, it.name, it.price, it.balance, it.iconName)
-        }
+        } ?: goal
         entity.activities?.forEach { activityAndHistoryItem ->
-            //todo. add tokenized actiity
-            val activity = activityAndHistoryItem.activity?.let {
-                Goal.TokenizedActivity(it.activityID,it.name, it.earnings))
+            activityAndHistoryItem.activity?.let {
+                val activity = Goal.TokenizedActivity(it.activityID,it.name, it.earnings)
+                activityAndHistoryItem.activityhistoryentities?.forEach { historyItem ->
+                    activity.log.add(historyItem.date)
+                }
+                goal.activities.add(activity)
             }
-            goal.activities?.add(activity
-        }
-        }
-
         }
         return goal
     }
+}*/
+
+object GoalMapper: Mapper<GoalEntity, Goal> {
+    override fun toEntity(domainmodel: Goal): GoalEntity {
+        var entity = GoalEntity(domainmodel.id, domainmodel.name, domainmodel.price, domainmodel.balance, domainmodel.iconName)
+        entity.activities = domainmodel.activities.map {tokenAct ->
+            ActivityEntity(tokenAct.id, domainmodel.id, tokenAct.name, tokenAct.earnings).apply {
+                historyItems = tokenAct.log.map { ActivityHistoryEntity(it, tokenAct.id)  }
+            }
+        }
+        return entity
+    }
+
+    override fun toDomainModel(entity: GoalEntity): Goal {
+        var goal = Goal(entity.goalID, entity.name, entity.price, entity.balance, entity.iconName)
+        goal.activities = entity.activities.map {act ->
+            Goal.TokenizedActivity(act.activityID, act.name, act.earnings).apply {
+                log = act.historyItems.map { it.date }.toMutableList()
+            }
+        }.toMutableList()
+        return goal
+    }
 }
+//
+//object ActivityMapper: Mapper<ActivityEntity, Goal.TokenizedActivity> {
+//    override fun toEntity(domainmodel: Goal.TokenizedActivity): ActivityEntity {
+//        var entity = ActivityEntity(domainmodel.id, domainmodel.
+//
+//    }
+//
+//    override fun toDomainModel(entity: ActivityEntity): Goal.TokenizedActivity {
+//        TODO("Not yet implemented")
+//    }
+//}
+
+//TODO: Add Mappers for activities and ActivitiesAndActivityHistoryItems

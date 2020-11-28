@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TokenizeTest</string>
+    <string name="app_name">Tokenize</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="addgoal_hint_notANumber">Please enter a valid price</string>

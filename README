@@ -1,0 +1,12 @@
+Tokenize - Reward yourself for building habits
+
+This is my first try of developing android apps in kotlin.
+It its current state it is merely a proof of concept, not a usable app!
+The idea of the app is to reward yourself for building habits.
+
+Say you fancy a new smartwatch? Why not combine it with your intention of doing more sports?
+With tokenize you can define a reward that has a certain price attached to it (e. g. a smartwatch) and choose one or more activities that you need to do in order to reward yourself with it.
+You pay yourself a certain amount (e.g. 5 $)  each time you do the activity, which gets you closer to your reward..
+In behavioral psychology, this "bribing system" is called token economy, hence the name of the app.
+
+(C) 2020 by F. Engel

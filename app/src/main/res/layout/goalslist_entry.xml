@@ -33,10 +33,21 @@
                 android:text="Smartwatch (300 €)"
                 android:textAlignment="viewStart"
                 android:textColor="@android:color/primary_text_light_nodisable"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@+id/progressBalance"
                 app:layout_constraintTop_toTopOf="@+id/imageSymbol" />
+
+<!--            <ImageButton-->
+<!--                android:id="@+id/goalDeleteButton"-->
+<!--                android:layout_width="77dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/imageSymbol"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/imageSymbol"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/imageSymbol"-->
+<!--                app:srcCompat="@android:drawable/ic_menu_delete"-->
+<!--                tools:visibility="invisible" />-->
 
             <ProgressBar
                 android:id="@+id/progressBalance"
@@ -65,7 +76,7 @@
                 android:layout_height="0dp"
                 android:adjustViewBounds="false"
                 android:cropToPadding="false"
-                android:src="@drawable/smartwatch"
+                android:src="@drawable/robot"
                 app:civ_border_color="#FF000000"
                 app:civ_border_width="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -80,7 +91,7 @@
                 android:gravity="center"
                 android:text="Balance: 150 € (50 %)"
                 android:textColor="@android:color/primary_text_light_nodisable"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/progressBalance"
                 app:layout_constraintTop_toBottomOf="@+id/progressBalance" />

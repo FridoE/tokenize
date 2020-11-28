@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright © 2020 F. Engel
 package com.example.tokenizetest
 
 import androidx.appcompat.app.AppCompatActivity
@@ -13,12 +15,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration : AppBarConfiguration
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.main_activity)
-//        if (savedInstanceState == null) {
-//            supportFragmentManager.beginTransaction()
-//                .replace(R.id.container, MainFragment.newInstance())
-//                .commitNow()
-//        }
+
         @Suppress("UNUSED_VARIABLE")
         val binding = DataBindingUtil.setContentView<MainActivityBinding>(this, R.layout.main_activity)
         val navController = this.findNavController(R.id.myNavHostFragment)
