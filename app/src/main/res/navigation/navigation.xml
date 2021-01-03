@@ -13,13 +13,13 @@
         <action
             android:id="@+id/action_mainFragment_to_addgoal_fragement"
             app:destination="@id/addgoal_fragement"
-            app:popUpTo="@id/addgoal_fragement"
+            app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_mainFragment_to_showGoalFragment"
             app:destination="@id/showGoalFragment"
             app:popUpTo="@id/mainFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/addgoal_fragement"
@@ -38,7 +38,7 @@
         <action
             android:id="@+id/action_addActivityFragment_to_mainFragment"
             app:destination="@id/mainFragment"
-            app:popUpTo="@id/mainFragment"
+            app:popUpTo="@id/addgoal_fragement"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment

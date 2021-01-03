@@ -36,18 +36,9 @@ class MainFragment : Fragment() {
             ViewModelProvider(this).get(GoalsListViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
-        /*val binding: MainActivityBinding = DataBindingUtil.setContentView(activity!!, R.layout.main_activity)
+        //val binding: MainActivityBinding = DataBindingUtil.setContentView(activity!!, R.layout.main_activity)
 
-        val navHost = activity?.supportFragmentManager?.findFragmentById(R.id.myNavHostFragment) as NavHostFragment
-        val navController = navHost.navController
-        val navInflater = navController.navInflater
-        val graph = navInflater.inflate(R.navigation.navigation)
-        if (goalListViewModel.goalsList.value == null) {
-            graph.startDestination = R.id.addgoal_fragement
-        } else {
-            graph.startDestination = R.id.mainFragment
-        }
-        navController.graph = graph*/
+
     }
 
     override fun onCreateView(
@@ -65,6 +56,10 @@ class MainFragment : Fragment() {
         goalListViewModel.goalsList.observe(this.viewLifecycleOwner, Observer { list ->
             adapter.submitList(list)
             adapter.notifyDataSetChanged()
+            if(list.size == 0) {
+                val action = MainFragmentDirections.actionMainFragmentToAddgoalFragement()
+                findNavController().navigate(action)
+            }
         })
 
         listView.layoutManager = LinearLayoutManager(this.context)
@@ -85,10 +80,7 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val action = MainFragmentDirections.actionMainFragmentToAddgoalFragement()
-        if(goalListViewModel.goalsList.value?.size == 0)
-            findNavController().navigate(action)
-
+   //     if(goalListViewModel.goalsList.value?.size == 0 || goalListViewModel.goalsList.value == null)
     }
 
     fun OnClickSelectGoalListItem(gvm: GoalsListItemViewModel) {

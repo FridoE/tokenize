@@ -13,10 +13,7 @@ import com.example.tokenizetest.R
 import com.example.tokenizetest.data.Goal
 import com.example.tokenizetest.data.Repository
 import com.example.tokenizetest.data.notifyObserver
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.util.*
 import java.util.stream.Collectors.toMap
 
@@ -27,7 +24,8 @@ class GoalsListViewModel(val app: Application) : AndroidViewModel(app) {
         get() = _goalsList
 
     private var viewModelJob = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+    private  val uiScope = CoroutineScope(Dispatchers.Main+ viewModelJob)
+    private  val ioScope = CoroutineScope(Dispatchers.IO+ viewModelJob)
 
     var newGoalName: String = ""
     var newGoalPrice: Int = 0
@@ -37,29 +35,16 @@ class GoalsListViewModel(val app: Application) : AndroidViewModel(app) {
     private val repository = Repository.getInstance(app.applicationContext)
 
     init {
-        //_goalsList.value = mutableListOf<GoalsListItemViewModel>()
+        var goals = listOf<Goal>()
         uiScope.launch {
             _goalsList.value = repository.getAllGoals().map {
                 GoalsListItemViewModel(app, it)
             }.toMutableList()
-            
-            //addGoal(GoalsListItemViewModel(app, newGoal))
-            //addGoal(GoalsListItemViewModel(app, secondGoal))
         }
-/*        var newGoal = Goal("Smartwatch", 500, "smartwatch", "Act1", 5)
-        newGoal.balance = 150
-        addGoal(GoalsListItemViewModel(app, newGoal))
-        var secondGoal = Goal("Fernseher", 350, "reward", "Act2", 10)
-        secondGoal.balance = 80
-        addGoal(GoalsListItemViewModel(app, secondGoal))*/
-        //var newGoal = Goal("Smartwatch", 500, "smartwatch", "Activity 1", 5)
-        //var secondGoal = Goal("Fernseher", 350, "reward", "Act2", 10)
-        //newGoal.balance = 150
-        //secondGoal.balance = 80
     }
 
     private fun addGoal(goal: GoalsListItemViewModel) {
-        uiScope.launch {
+        ioScope.launch {
             repository.insert(goal.goal)
         }
         _goalsList.value?.add(goal)
@@ -84,7 +69,7 @@ class GoalsListViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     fun deleteGoal(goal: GoalsListItemViewModel) {
-        uiScope.launch {
+        ioScope.launch {
             repository.delete(goal.goal)
         }
         _goalsList.value?.remove(goal)
