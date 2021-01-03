@@ -4,7 +4,7 @@ This is my first try of developing android apps in kotlin.
 It its current state it is merely a proof of concept, not a usable app!
 The idea of the app is to reward yourself for building habits.
 
-Say you fancy a new smartwatch? Why not combine it with your intention of doing more sports?
+For example, you might want to establish the habit of doing sports regularly. Why not reward yourself with a fancy new gadget (e.g. a new smartwatch) for reaching that goal?
 With tokenize you can define a reward that has a certain price attached to it (e. g. a smartwatch) and choose one or more activities that you need to do in order to reward yourself with it.
 You pay yourself a certain amount (e.g. 5 $)  each time you do the activity, which gets you closer to your reward..
 In behavioral psychology, this "bribing system" is called token economy, hence the name of the app.
